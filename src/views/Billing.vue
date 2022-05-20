@@ -8,38 +8,23 @@
     <!-- Counter Widgets -->
     <a-row :gutter="24" style="margin: 20px">
       <a-col :span="6">
-        <a-select
-          v-model="sidocode"
-          default-value="시/도 선택"
-          style="width: 100%"
-          @change="sidoChange"
-        >
+        <a-select v-model="sidocode" style="width: 100%" @change="sidoChange">
           <a-select-option
             v-for="(sido, index) in sidoList"
             :key="index"
             :value="sido.code"
             >{{ sido.name }}
           </a-select-option>
-          <a-select-option value="jack"> Jack </a-select-option>
-          <a-select-option value="lucy"> Lucy </a-select-option>
-          <a-select-option value="disabled" disabled>
-            Disabled
-          </a-select-option>
-          <a-select-option value="Yiminghe"> yiminghe </a-select-option>
         </a-select>
       </a-col>
       <a-col :span="6">
-        <a-select
-          default-value="구/군 선택"
-          style="width: 100%"
-          @change="handleChange"
-        >
-          <a-select-option value="jack"> Jack </a-select-option>
-          <a-select-option value="lucy"> Lucy </a-select-option>
-          <a-select-option value="disabled" disabled>
-            Disabled
+        <a-select v-model="guguncode" style="width: 100%" @change="gugunChange">
+          <a-select-option
+            v-for="(gugun, index) in gugunList"
+            :key="index"
+            :value="gugun.code"
+            >{{ gugun.name }}
           </a-select-option>
-          <a-select-option value="Yiminghe"> yiminghe </a-select-option>
         </a-select>
       </a-col>
       <a-col :span="6">
@@ -48,7 +33,6 @@
           :class="searchLoading ? 'loading' : ''"
           placeholder="Header search input"
           @search="onSearch"
-          :loading="searchLoading"
         >
         </a-input-search>
       </a-col>
@@ -295,14 +279,14 @@ export default {
       markerSet: [],
       centerSetting: false,
       starbucksList: [],
-      sidoList: [],
-      sidocode: "",
-      gugunList: [],
-      guguncode: "",
+      sidoList: [{ code: "default", name: "시/도 선택" }],
+      sidocode: "default",
+      gugunList: [{ code: "default", name: "구/군 선택" }],
+      guguncode: "default",
     };
   }, // end of data
   created() {
-    this.getSidoList;
+    this.getSidoList();
   },
 
   mounted() {
@@ -329,29 +313,32 @@ export default {
       };
       this.map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
     },
+    getSidoList() {
+      console.log("get sido list");
+      http.get("/region/sido").then(({ data }) => {
+        data.forEach((element) => {
+          this.sidoList.push(element);
+        });
+      });
+    },
+    sidoChange() {
+      console.log("sido change");
+      const code = this.sidocode;
+      http.get("/region/gugun/" + code).then(({ data }) => {
+        data.forEach((element) => {
+          this.gugunList.push(element);
+        });
+      });
+    },
+    gugunChange() {
+      console.log("gugun change");
+    },
+
     handleChange: function () {},
     searchLoading: function () {},
     onSearch: function () {},
     change: function () {},
     search: function () {},
-  },
-
-  getSidoList() {
-    http.get("/region/sido").then(({ data }) => {
-      data.forEach((element) => {
-        this.sidoList.push(element);
-      });
-    });
-  },
-  sidoChange() {
-    const code = this.sidocode;
-    http
-      .get(`http://localhost:9999/server/region/gugun/{code}`)
-      .then(({ data }) => {
-        data.forEach((element) => {
-          this.gugunList.push(element);
-        });
-      });
   },
 }; // end of export
 </script>
