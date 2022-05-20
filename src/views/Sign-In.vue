@@ -34,6 +34,7 @@
                   rules: [{ required: true, message: 'Please input your id!' }],
                 },
               ]"
+              v-model="user.userid"
               placeholder="id"
             />
           </a-form-item>
@@ -48,6 +49,7 @@
                 },
               ]"
               type="password"
+              v-model="user.userpass"
               placeholder="Password"
             />
           </a-form-item>
@@ -92,6 +94,10 @@ export default {
   data() {
     return {
       // Binded model property for "Sign In Form" switch button for "Remember Me" .
+      user: {
+        userid: "",
+        userpass: "",
+      },
       rememberMe: true,
     };
   },
@@ -99,16 +105,32 @@ export default {
     // Creates the form and adds to it component's "form" property.
     this.form = this.$form.createForm(this, { name: "normal_login" });
   },
+  computed: {
+    ...mapState(memberStore, ["isLogin"]),
+  },
   methods: {
-    // Handles input validation after submission.
-    handleSubmit(e) {
-      e.preventDefault();
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log("Received values of form: ", values);
-        }
-      });
+    ...mapActions(memberStore, ["userConfirm", "getUserInfo"]),
+
+    async loginBtn() {
+      console.log("로그인할 사용자 : " + this.user.userid);
+      await this.userConfirm(this.user);
+      let token = sessionStorage.getItem("access-token");
+      //로그인 됬으면,
+      if (this.isLogin) {
+        //console.log("로그인 되었음 ");
+        await this.getUserInfo(token);
+        this.$router.push({ name: "Home" });
+      }
     },
+    // Handles input validation after submission.
+    // handleSubmit(e) {
+    //   e.preventDefault();
+    //   this.form.validateFields((err, values) => {
+    //     if (!err) {
+    //       console.log("Received values of form: ", values);
+    //     }
+    //   });
+    // },
   },
 };
 </script>
