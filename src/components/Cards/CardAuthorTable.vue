@@ -18,7 +18,7 @@
         </a-col>
       </a-row>
     </template>
-    <a-table :columns="columns" :data-source="data" :pagination="false" :rowKey="articleno">
+    <a-table :columns="columns" :data-source="data" :pagination="true">
       <template slot="articleno" slot-scope="articleno">
         <div class="author-info">
           <h6 class="m-0">{{ articleno }}</h6>

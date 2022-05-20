@@ -63,11 +63,11 @@
       <a-col :span="2">
         <a-row style="text-align: center"><h6>평수</h6></a-row>
         <a-select v-model="areaFilter" default-value="all" style="width: 100%">
-          <a-select-option value="all"> 전체 </a-select-option>
-          <a-select-option value="0"> 20평이하 </a-select-option>
-          <a-select-option value="20"> 20평대 </a-select-option>
-          <a-select-option value="30"> 30평대 </a-select-option>
-          <a-select-option value="40"> 40평이상 </a-select-option>
+          <a-select-option value="0"> 전체 </a-select-option>
+          <a-select-option value="1"> 20평이하 </a-select-option>
+          <a-select-option value="2"> 20평대 </a-select-option>
+          <a-select-option value="3"> 30평대 </a-select-option>
+          <a-select-option value="4"> 40평이상 </a-select-option>
         </a-select>
       </a-col>
       <!--------------------------------- /area filter  --------------------------------->
@@ -75,10 +75,10 @@
       <a-col :span="2">
         <a-row style="text-align: center"><h6>층수</h6></a-row>
         <a-select v-model="floorFilter" default-value="all" style="width: 100%">
-          <a-select-option value="all"> 전체 </a-select-option>
-          <a-select-option value="0"> 5층 미만 </a-select-option>
-          <a-select-option value="20"> 5층 이상 </a-select-option>
-          <a-select-option value="30"> 10층 이상 </a-select-option>
+          <a-select-option value="0"> 전체 </a-select-option>
+          <a-select-option value="1"> 5층 미만 </a-select-option>
+          <a-select-option value="2"> 5층 이상 </a-select-option>
+          <a-select-option value="3"> 10층 이상 </a-select-option>
         </a-select>
       </a-col>
       <!--------------------------------- /floor filter  --------------------------------->
@@ -90,10 +90,10 @@
           default-value="all"
           style="width: 100%"
         >
-          <a-select-option value="all"> 전체 </a-select-option>
-          <a-select-option value="0"> 5억 미만 </a-select-option>
-          <a-select-option value="20"> 5억 이상 </a-select-option>
-          <a-select-option value="30"> 10억 이상 </a-select-option>
+          <a-select-option value="0"> 전체 </a-select-option>
+          <a-select-option value="1"> 5억 미만 </a-select-option>
+          <a-select-option value="2"> 5억 이상 </a-select-option>
+          <a-select-option value="3"> 10억 이상 </a-select-option>
         </a-select>
       </a-col>
       <!--------------------------------- /dealAmount filter  --------------------------------->
@@ -120,6 +120,10 @@
     </a-row>
 
     <!--------------------------------- /kakao map  --------------------------------->
+
+    <!--------------------------------- table  --------------------------------->
+    <draw-house-table :data="data"></draw-house-table>
+    <!--------------------------------- /table  --------------------------------->
 
     <a-row type="flex" :gutter="24">
       <!-- Billing Info Column -->
@@ -192,6 +196,7 @@ import CardPaymentMethods from "../components/Cards/CardPaymentMethods";
 import CardInvoices from "../components/Cards/CardInvoices";
 import CardBillingInfo from "../components/Cards/CardBillingInfo";
 import CardTransactions from "../components/Cards/CardTransactions";
+import DrawHouseTable from "../components/MapComponent/DrawHouseTable";
 import http from "@/api/http";
 // Salary cards data
 const salaries = [
@@ -305,6 +310,7 @@ export default {
     CardInvoices,
     CardBillingInfo,
     CardTransactions,
+    DrawHouseTable,
   },
   data() {
     return {
@@ -323,12 +329,15 @@ export default {
       sidocode: "default",
       gugunList: [{ code: "default", name: "구/군 선택" }],
       guguncode: "default",
+
+      infos: [],
       // input apart name
-      inputName: null,
+      inputName: "",
       // filter
-      areaFilter: "all",
-      floorFilter: "all",
-      dealAmountFilter: "all",
+      areaFilter: "0",
+      floorFilter: "0",
+      dealAmountFilter: "0",
+      data: [],
     };
   }, // end of data
   created() {
@@ -345,6 +354,11 @@ export default {
         "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=8273ad75e4cf13f650633b14013a60c0&libraries=services";
       document.head.appendChild(script);
     }
+  },
+  watch: {
+    infos: function (curr, prev) {
+      markPositions(curr, prev);
+    },
   },
   methods: {
     initMap() {
@@ -388,16 +402,32 @@ export default {
       );
       console.log("codes : ", this.sidocode, this.guguncode);
 
-      const params = {
+      const param = JSON.stringify({
         gugunCode: this.guguncode,
         inputName: this.inputName,
         area: this.areaFilter,
         floor: this.floorFilter,
         dealAmount: this.dealAmountFilter,
-      };
-      http.get("/resthouse/filterSearch", params).then(({ data }) => {
-        console.log(data);
       });
+      console.log(param);
+      var headers = {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST",
+      };
+      http
+        .post("/resthouse/filterSearch", param, { headers })
+        .then(({ data }) => {
+          console.log(data);
+          this.drawMap();
+          this.infos = data;
+          this.data = data;
+        });
+    },
+
+    drawMap: function () {
+      console.log("drawing Map...");
+      this.data = this.infos;
     },
     handleChange: function () {},
     searchLoading: function () {},
