@@ -34,31 +34,32 @@
       <!--------------------------------- /gugun select  --------------------------------->
       <!--------------------------------- input  --------------------------------->
       <a-col :span="6">
-        <a-input-search
+        <a-input
           placeholder="아파트 이름 검색"
-          enter
+          v-model="inputName"
           enter-button
-          @click="search"
+          @search="search"
         >
-        </a-input-search>
+        </a-input>
       </a-col>
+      <!--------------------------------- /input  --------------------------------->
 
+      <!--------------------------------- search  --------------------------------->
       <a-col :span="2">
         <a-button type="primary" style="margin-bottom: 0px" @click="search"
           >search</a-button
         >
       </a-col>
+      <!--------------------------------- /search  --------------------------------->
 
-      <!--------------------------------- /input  --------------------------------->
-
-      <!--------------------------------- search  --------------------------------->
+      <!--------------------------------- filter  --------------------------------->
     </a-row>
-    <!--------------------------------- /search  --------------------------------->
     <a-row :gutter="24" style="margin-bottom: 20px">
       <a-col :span="1">
         <h5><strong>Filter</strong></h5>
       </a-col>
 
+      <!--------------------------------- area filter  --------------------------------->
       <a-col :span="2">
         <a-row style="text-align: center"><h6>평수</h6></a-row>
         <a-select v-model="areaFilter" default-value="all" style="width: 100%">
@@ -69,6 +70,8 @@
           <a-select-option value="40"> 40평이상 </a-select-option>
         </a-select>
       </a-col>
+      <!--------------------------------- /area filter  --------------------------------->
+      <!--------------------------------- floor filter  --------------------------------->
       <a-col :span="2">
         <a-row style="text-align: center"><h6>층수</h6></a-row>
         <a-select v-model="floorFilter" default-value="all" style="width: 100%">
@@ -78,6 +81,8 @@
           <a-select-option value="30"> 10층 이상 </a-select-option>
         </a-select>
       </a-col>
+      <!--------------------------------- /floor filter  --------------------------------->
+      <!--------------------------------- dealAmount filter  --------------------------------->
       <a-col :span="2">
         <a-row style="text-align: center"><h6>매매가격</h6></a-row>
         <a-select
@@ -91,7 +96,10 @@
           <a-select-option value="30"> 10억 이상 </a-select-option>
         </a-select>
       </a-col>
+      <!--------------------------------- /dealAmount filter  --------------------------------->
     </a-row>
+    <!--------------------------------- /filter  --------------------------------->
+
     <!--------------------------------- /Search Bar  --------------------------------->
 
     <!--------------------------------- kakao map  --------------------------------->
@@ -315,7 +323,8 @@ export default {
       sidocode: "default",
       gugunList: [{ code: "default", name: "구/군 선택" }],
       guguncode: "default",
-
+      // input apart name
+      inputName: null,
       // filter
       areaFilter: "all",
       floorFilter: "all",
@@ -359,6 +368,7 @@ export default {
     sidoChange() {
       console.log("sido change");
       const code = this.sidocode;
+      this.gugunList = [{ code: "default", name: "구/군 선택" }];
       http.get("/region/gugun/" + code).then(({ data }) => {
         data.forEach((element) => {
           this.gugunList.push(element);
@@ -377,6 +387,17 @@ export default {
         this.dealAmountFilter
       );
       console.log("codes : ", this.sidocode, this.guguncode);
+
+      const params = {
+        gugunCode: this.guguncode,
+        inputName: this.inputName,
+        area: this.areaFilter,
+        floor: this.floorFilter,
+        dealAmount: this.dealAmountFilter,
+      };
+      http.get("/resthouse/filterSearch", params).then(({ data }) => {
+        console.log(data);
+      });
     },
     handleChange: function () {},
     searchLoading: function () {},
