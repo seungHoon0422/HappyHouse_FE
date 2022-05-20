@@ -143,7 +143,7 @@
           <span class="label">Profile</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item v-if="userInfo">
+      <!-- <a-menu-item v-if="userInfo">
         <router-link to="/sign-in">
           <span class="icon">
             <svg
@@ -163,8 +163,8 @@
           </span>
           <span class="label">Sign out</span>
         </router-link>
-      </a-menu-item>
-      <a-menu-item v-else>
+      </a-menu-item> -->
+      <a-menu-item v-if="userInfo === null">
         <router-link to="/sign-in">
           <span class="icon">
             <svg

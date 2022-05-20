@@ -134,12 +134,13 @@
               />
             </svg>
           </a-button>
-          <router-link
+          <!-- <router-link
             v-if="userInfo"
             to="/Profile"
             class="btn-profile"
             @click="(e) => e.preventDefault()"
-          >
+          > -->
+          <a-dropdown-button v-if="userInfo">
             <svg
               width="20"
               height="20"
@@ -154,8 +155,18 @@
                 fill="#111827"
               />
             </svg>
-            <span>username</span>
-          </router-link>
+            <!-- <a-dropdown-button v-if="userInfo"> -->
+            {{ userInfo.username }}
+            <a-menu slot="overlay">
+              <a-menu-item key="1">
+                <router-link to="/Profile">profile</router-link>
+              </a-menu-item>
+              <a-menu-item key="2" @click="logout">logout </a-menu-item>
+            </a-menu>
+            <a-icon slot="icon" type="user" />
+          </a-dropdown-button>
+          <!-- <span>{{ userInfo.username }}</span> -->
+          <!-- </router-link> -->
           <router-link
             v-else
             to="/sign-in"
@@ -215,7 +226,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 const memberStore = "memberStore";
 const notificationsData = [
   {
@@ -277,24 +288,33 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     resizeEventHandler() {
       this.top = this.top ? 0 : -0.01;
       // To refresh the header if the window size changes.
       // Reason for the negative value is that it doesn't activate the affix unless
-      // scroller is anywhere but the top of the page.
+      // scroller is anywhere but the top of the page
     },
     onSearch(value) {},
+    logout() {
+      this.SET_IS_LOGIN(false);
+      this.SET_USER_INFO(null);
+      sessionStorage.removeItem("access-token");
+      if (this.$route.path != "/") this.$router.push({ name: "Home" });
+      console.log("bye");
+    },
   },
   mounted: function () {
     // Set the wrapper to the proper element, layout wrapper.
     this.wrapper = document.getElementById("layout-dashboard");
   },
   computed: {
-    ...mapState(memberStore, ["userInfo"]),
+    ...mapState(memberStore, ["isLogin", "userInfo"]),
   },
   created() {
     // Registering window resize event listener to fix affix elements size
     // error while resizing.
+
     window.addEventListener("resize", this.resizeEventHandler);
   },
   destroyed() {
