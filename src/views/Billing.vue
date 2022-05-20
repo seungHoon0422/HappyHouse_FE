@@ -9,10 +9,17 @@
     <a-row :gutter="24" style="margin: 20px">
       <a-col :span="6">
         <a-select
+          v-model="sidocode"
           default-value="시/도 선택"
           style="width: 100%"
-          @change="handleChange"
+          @change="sidoChange"
         >
+          <a-select-option
+            v-for="(sido, index) in sidoList"
+            :key="index"
+            :value="sido.code"
+            >{{ sido.name }}
+          </a-select-option>
           <a-select-option value="jack"> Jack </a-select-option>
           <a-select-option value="lucy"> Lucy </a-select-option>
           <a-select-option value="disabled" disabled>
@@ -69,8 +76,12 @@
     <a-row :gutter="24">
       <a-col :span="24">
         <div
-          class="bg-warning"
-          style="width: 100%; height: 700px; margin-bottom: 30px"
+          style="
+            width: 100%;
+            height: 700px;
+            margin-bottom: 30px;
+            text-align: center;
+          "
         >
           <strong>kakao map</strong>
           <div id="map"></div>
@@ -151,6 +162,7 @@ import CardPaymentMethods from "../components/Cards/CardPaymentMethods";
 import CardInvoices from "../components/Cards/CardInvoices";
 import CardBillingInfo from "../components/Cards/CardBillingInfo";
 import CardTransactions from "../components/Cards/CardTransactions";
+import http from "@/api/http";
 
 // Salary cards data
 const salaries = [
@@ -283,9 +295,15 @@ export default {
       markerSet: [],
       centerSetting: false,
       starbucksList: [],
+      sidoList: [],
+      sidocode: "",
+      gugunList: [],
+      guguncode: "",
     };
   }, // end of data
-  created() {},
+  created() {
+    this.getSidoList;
+  },
 
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -316,6 +334,24 @@ export default {
     onSearch: function () {},
     change: function () {},
     search: function () {},
+  },
+
+  getSidoList() {
+    http.get("/region/sido").then(({ data }) => {
+      data.forEach((element) => {
+        this.sidoList.push(element);
+      });
+    });
+  },
+  sidoChange() {
+    const code = this.sidocode;
+    http
+      .get(`http://localhost:9999/server/region/gugun/{code}`)
+      .then(({ data }) => {
+        data.forEach((element) => {
+          this.gugunList.push(element);
+        });
+      });
   },
 }; // end of export
 </script>
