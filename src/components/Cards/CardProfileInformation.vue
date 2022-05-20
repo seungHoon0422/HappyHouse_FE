@@ -30,7 +30,66 @@
       </svg>
     </a-button>
     <hr class="my-15" />
+    <!-- 모달
+    <a-modal :visible="visible" title="Title">
+      <template #footer>
+        <a-button key="back" @click="handleCancel">취소</a-button>
+        <a-button key="modify" @click="handleOk">수정</a-button>
+      </template>
+      <a-form-item label="이름" class="mb-10">
+        <a-input style="width: 350px" placeholder="Name" v-model="username">
+        </a-input>
+      </a-form-item>
+      <a-form-item label="아이디" class="mb-10">
+        <a-input style="width: 350px" placeholder="id" v-model="userid">
+        </a-input>
+      </a-form-item>
+      <a-form-item label="비밀번호" class="mb-5">
+        <a-input
+          style="width: 350px"
 
+          type="password"
+          placeholder="Password"
+          v-model="userpass"
+        >
+        </a-input>
+      </a-form-item>
+      <a-form-item label="이메일" class="mb-10">
+        <a-input
+          style="width: 150px"
+          v-decorator="[
+            'email',
+            {
+              rules: [{ required: true, message: 'Please input your email!' }],
+            },
+          ]"
+          placeholder="Email"
+          v-model="emailid"
+        >
+        </a-input>
+        &nbsp; @ &nbsp;
+        <a-select v-model="emaildomain" style="width: 170px">
+          <a-select-option value="naver.com">naver.com </a-select-option>
+          <a-select-option value="ssafy.com">ssafy.com </a-select-option>
+          <a-select-option value="google.com">google.com </a-select-option>
+          <a-select-option value="daum.com"> daum.net </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="휴대폰" class="mb-10">
+        <a-input
+          style="width: 350px"
+          v-decorator="[
+            'phone',
+            {
+              rules: [{ required: true, message: 'Please input your phone!' }],
+            },
+          ]"
+          placeholder="010-xxxx-xxxx"
+          v-model="phone"
+        >
+        </a-input>
+      </a-form-item>
+    </a-modal> -->
     <a-descriptions :column="1" class="text-center">
       <a-descriptions-item label="이름">
         {{ userInfo.username }}
@@ -66,13 +125,22 @@
 <script>
 import { mapState } from "vuex";
 const memberStore = "memberStore";
-
 export default {
   data() {
-    return {};
+    return {
+      // visible: false,
+    };
   },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
   },
+  // methods: {
+  //   showModal() {
+  //     this.visible = true;
+  //   },
+  //   handleCancel() {
+  //     this.visible = false;
+  //   },
+  // },
 };
 </script>
