@@ -6,9 +6,8 @@
 <template>
   <div>
     <!-- Counter Widgets -->
-    <a-row :gutter="24">
-      <a-col :span="24" class="bg-primary"> </a-col>
-      <a-col :span="6" class="bg-secondary">
+    <a-row :gutter="24" style="margin: 20px">
+      <a-col :span="6">
         <a-select
           default-value="시/도 선택"
           style="width: 100%"
@@ -22,7 +21,7 @@
           <a-select-option value="Yiminghe"> yiminghe </a-select-option>
         </a-select>
       </a-col>
-      <a-col :span="6" class="bg-secondary">
+      <a-col :span="6">
         <a-select
           default-value="구/군 선택"
           style="width: 100%"
@@ -36,8 +35,50 @@
           <a-select-option value="Yiminghe"> yiminghe </a-select-option>
         </a-select>
       </a-col>
+      <a-col :span="6">
+        <a-input-search
+          class="header-search"
+          :class="searchLoading ? 'loading' : ''"
+          placeholder="Header search input"
+          @search="onSearch"
+          :loading="searchLoading"
+        >
+        </a-input-search>
+      </a-col>
+      <a-col :span="2">
+        <a-menu>
+          <a-sub-menu>
+            <span slot="title" class="submenu-title-wrapper"
+              ><a-icon type="setting" />Filter</span
+            >
+            <a-menu-item-group title="Item 1">
+              <a-menu-item key="setting:1"> Option 1 </a-menu-item>
+              <a-menu-item key="setting:2"> Option 2 </a-menu-item>
+            </a-menu-item-group>
+            <a-menu-item-group title="Item 2">
+              <a-menu-item key="setting:3"> Option 3 </a-menu-item>
+              <a-menu-item key="setting:4"> Option 4 </a-menu-item>
+            </a-menu-item-group>
+          </a-sub-menu>
+        </a-menu>
+      </a-col>
     </a-row>
     <!-- / Counter Widgets -->
+
+    <!-- kakao map  -->
+    <a-row :gutter="24">
+      <a-col :span="24">
+        <div
+          class="bg-warning"
+          style="width: 100%; height: 700px; margin-bottom: 30px"
+        >
+          <strong>kakao map</strong>
+          <div id="map"></div>
+        </div>
+      </a-col>
+    </a-row>
+
+    <!-- /kakao map  -->
 
     <a-row type="flex" :gutter="24">
       <!-- Billing Info Column -->
@@ -237,9 +278,51 @@ export default {
 
       // Associating "Your Transactions" list data with its corresponding property.
       transactionsData,
+      map: null,
+      markerPositions: [],
+      markerSet: [],
+      centerSetting: false,
+      starbucksList: [],
     };
+  }, // end of data
+  created() {},
+
+  mounted() {
+    if (window.kakao && window.kakao.maps) {
+      this.initMap();
+    } else {
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=8273ad75e4cf13f650633b14013a60c0&libraries=services";
+      document.head.appendChild(script);
+    }
   },
-};
+  methods: {
+    initMap() {
+      console.log("initMap");
+
+      var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+      var options = {
+        //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+        level: 4, //지도의 레벨(확대, 축소 정도)
+      };
+      this.map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    },
+    handleChange: function () {},
+    searchLoading: function () {},
+    onSearch: function () {},
+    change: function () {},
+    search: function () {},
+  },
+}; // end of export
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+#map {
+  width: 100%;
+  height: 100%;
+}
+</style>
