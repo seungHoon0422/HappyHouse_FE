@@ -5,18 +5,22 @@
 
 <template>
   <div>
-    <!-- Counter Widgets -->
-    <a-row :gutter="24" style="margin: 20px">
+    <!--------------------------------- Search Bar  --------------------------------->
+    <a-row :gutter="24" style="margin-bottom: 20px">
+      <!--------------------------------- sido select  --------------------------------->
       <a-col :span="6">
         <a-select v-model="sidocode" style="width: 100%" @change="sidoChange">
           <a-select-option
             v-for="(sido, index) in sidoList"
             :key="index"
+            rowKey="index"
             :value="sido.code"
             >{{ sido.name }}
           </a-select-option>
         </a-select>
       </a-col>
+      <!--------------------------------- /sido select  --------------------------------->
+      <!--------------------------------- gugun select  --------------------------------->
       <a-col :span="6">
         <a-select v-model="guguncode" style="width: 100%" @change="gugunChange">
           <a-select-option
@@ -27,36 +31,70 @@
           </a-select-option>
         </a-select>
       </a-col>
+      <!--------------------------------- /gugun select  --------------------------------->
+      <!--------------------------------- input  --------------------------------->
       <a-col :span="6">
         <a-input-search
-          class="header-search"
-          :class="searchLoading ? 'loading' : ''"
-          placeholder="Header search input"
-          @search="onSearch"
+          placeholder="아파트 이름 검색"
+          enter
+          enter-button
+          @click="search"
         >
         </a-input-search>
       </a-col>
+
       <a-col :span="2">
-        <a-menu>
-          <a-sub-menu>
-            <span slot="title" class="submenu-title-wrapper"
-              ><a-icon type="setting" />Filter</span
-            >
-            <a-menu-item-group title="Item 1">
-              <a-menu-item key="setting:1"> Option 1 </a-menu-item>
-              <a-menu-item key="setting:2"> Option 2 </a-menu-item>
-            </a-menu-item-group>
-            <a-menu-item-group title="Item 2">
-              <a-menu-item key="setting:3"> Option 3 </a-menu-item>
-              <a-menu-item key="setting:4"> Option 4 </a-menu-item>
-            </a-menu-item-group>
-          </a-sub-menu>
-        </a-menu>
+        <a-button type="primary" style="margin-bottom: 0px" @click="search"
+          >search</a-button
+        >
+      </a-col>
+
+      <!--------------------------------- /input  --------------------------------->
+
+      <!--------------------------------- search  --------------------------------->
+    </a-row>
+    <!--------------------------------- /search  --------------------------------->
+    <a-row :gutter="24" style="margin-bottom: 20px">
+      <a-col :span="1">
+        <h5><strong>Filter</strong></h5>
+      </a-col>
+
+      <a-col :span="2">
+        <a-row style="text-align: center"><h6>평수</h6></a-row>
+        <a-select v-model="areaFilter" default-value="all" style="width: 100%">
+          <a-select-option value="all"> 전체 </a-select-option>
+          <a-select-option value="0"> 20평이하 </a-select-option>
+          <a-select-option value="20"> 20평대 </a-select-option>
+          <a-select-option value="30"> 30평대 </a-select-option>
+          <a-select-option value="40"> 40평이상 </a-select-option>
+        </a-select>
+      </a-col>
+      <a-col :span="2">
+        <a-row style="text-align: center"><h6>층수</h6></a-row>
+        <a-select v-model="floorFilter" default-value="all" style="width: 100%">
+          <a-select-option value="all"> 전체 </a-select-option>
+          <a-select-option value="0"> 5층 미만 </a-select-option>
+          <a-select-option value="20"> 5층 이상 </a-select-option>
+          <a-select-option value="30"> 10층 이상 </a-select-option>
+        </a-select>
+      </a-col>
+      <a-col :span="2">
+        <a-row style="text-align: center"><h6>매매가격</h6></a-row>
+        <a-select
+          v-model="dealAmountFilter"
+          default-value="all"
+          style="width: 100%"
+        >
+          <a-select-option value="all"> 전체 </a-select-option>
+          <a-select-option value="0"> 5억 미만 </a-select-option>
+          <a-select-option value="20"> 5억 이상 </a-select-option>
+          <a-select-option value="30"> 10억 이상 </a-select-option>
+        </a-select>
       </a-col>
     </a-row>
-    <!-- / Counter Widgets -->
+    <!--------------------------------- /Search Bar  --------------------------------->
 
-    <!-- kakao map  -->
+    <!--------------------------------- kakao map  --------------------------------->
     <a-row :gutter="24">
       <a-col :span="24">
         <div
@@ -73,7 +111,7 @@
       </a-col>
     </a-row>
 
-    <!-- /kakao map  -->
+    <!--------------------------------- /kakao map  --------------------------------->
 
     <a-row type="flex" :gutter="24">
       <!-- Billing Info Column -->
@@ -147,7 +185,6 @@ import CardInvoices from "../components/Cards/CardInvoices";
 import CardBillingInfo from "../components/Cards/CardBillingInfo";
 import CardTransactions from "../components/Cards/CardTransactions";
 import http from "@/api/http";
-
 // Salary cards data
 const salaries = [
   {
@@ -173,7 +210,6 @@ const salaries = [
     content: "Freelance Payment",
   },
 ];
-
 // "Invoices" list data.
 const invoiceData = [
   {
@@ -202,7 +238,6 @@ const invoiceData = [
     amount: "700",
   },
 ];
-
 // "Your Transactions" list data.
 const transactionsData = [
   {
@@ -254,7 +289,6 @@ const transactionsData = [
     status: "warning",
   },
 ];
-
 export default {
   components: {
     CardCredit,
@@ -268,10 +302,8 @@ export default {
     return {
       // Salary cards data
       salaries,
-
       // Associating "Invoices" list data with its corresponding property.
       invoiceData,
-
       // Associating "Your Transactions" list data with its corresponding property.
       transactionsData,
       map: null,
@@ -283,12 +315,16 @@ export default {
       sidocode: "default",
       gugunList: [{ code: "default", name: "구/군 선택" }],
       guguncode: "default",
+
+      // filter
+      areaFilter: "all",
+      floorFilter: "all",
+      dealAmountFilter: "all",
     };
   }, // end of data
   created() {
     this.getSidoList();
   },
-
   mounted() {
     if (window.kakao && window.kakao.maps) {
       this.initMap();
@@ -304,7 +340,6 @@ export default {
   methods: {
     initMap() {
       console.log("initMap");
-
       var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
       var options = {
         //지도를 생성할 때 필요한 기본 옵션
@@ -333,12 +368,20 @@ export default {
     gugunChange() {
       console.log("gugun change");
     },
-
+    search: function () {
+      console.log("serach button");
+      console.log(
+        "filter",
+        this.areaFilter,
+        this.floorFilter,
+        this.dealAmountFilter
+      );
+      console.log("codes : ", this.sidocode, this.guguncode);
+    },
     handleChange: function () {},
     searchLoading: function () {},
     onSearch: function () {},
     change: function () {},
-    search: function () {},
   },
 }; // end of export
 </script>
