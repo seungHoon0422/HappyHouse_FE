@@ -9,11 +9,15 @@
     <template #title>
       <h6 class="font-semibold m-0 pl-10">나의 관심목록</h6>
     </template>
-    <ul>
-      <li v-for="(interest, index) in interests" :key="index">
-        {{ interest.aptname }}
-      </li>
-    </ul>
+    <a-list item-layout="horizontal" :data-source="interests">
+      <template #renderItem="{ interest }">
+        <a-list-item>
+          <template #title>
+            <p>{{ interest.index }}</p>
+          </template>
+        </a-list-item>
+      </template>
+    </a-list>
   </a-card>
   <!-- / Conversations Card -->
 </template>
@@ -22,7 +26,6 @@
 import { mapState } from "vuex";
 import http from "@/api/http";
 const memberStore = "memberStore";
-
 export default {
   data() {
     return {
@@ -33,13 +36,8 @@ export default {
     let userid = this.userInfo.userid;
     http.get("/interest/" + userid).then(({ data }) => {
       console.log(data);
-      data.forEach((element) => {
-        let interest = {
-          aptname: element,
-        };
-        this.interests.push(interest);
-        console.log(this.interests);
-      });
+      this.interests = data;
+      console.log(this.interests);
     });
   },
   computed: {
