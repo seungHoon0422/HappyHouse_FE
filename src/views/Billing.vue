@@ -321,6 +321,8 @@ export default {
       // Associating "Your Transactions" list data with its corresponding property.
       transactionsData,
       map: null,
+      markers: [],
+      markerArr: [],
       markerPositions: [],
       markerSet: [],
       centerSetting: false,
@@ -357,7 +359,8 @@ export default {
   },
   watch: {
     infos: function (curr, prev) {
-      markPositions(curr, prev);
+      this.eraseMarkers();
+      this.updateMarkers();
     },
   },
   methods: {
@@ -418,17 +421,54 @@ export default {
       http
         .post("/resthouse/filterSearch", param, { headers })
         .then(({ data }) => {
-          console.log(data);
-          this.drawMap();
+          //          console.log(data);
           this.infos = data;
           this.data = data;
         });
     },
 
-    drawMap: function () {
-      console.log("drawing Map...");
-      this.data = this.infos;
+    updateMarkers: function () {
+      console.log("update markers", this.infos);
+      this.markers = [];
+      let uniqueAptCodes = [];
+      this.infos.forEach((element) => {
+        const aptcode = element.aptCode;
+        if (!uniqueAptCodes.includes(aptcode)) {
+          uniqueAptCodes.push(aptcode);
+          this.markers.push(element);
+        }
+      });
+
+      this.positionMarkers();
     },
+
+    positionMarkers: function () {
+      this.markers.forEach((element, index) => {
+        let position = new kakao.maps.LatLng(element.lat, element.lng);
+        let marker = new kakao.maps.Marker({
+          map: this.map,
+          position: position,
+        });
+        this.markerArr.push(marker);
+        marker.setMap(this.map);
+        var infowindow = new kakao.maps.InfoWindow({
+          content:
+            '<div style="width:200px;text-align:center;padding:6px 0;">' +
+            element.aptName +
+            "</div>",
+        });
+        if (index == 0) this.map.setCenter(position);
+      });
+    },
+
+    eraseMarkers: function () {
+      console.log("erase markers", this.markerArr);
+
+      this.markerArr.forEach((element) => {
+        element.setMap(null);
+      });
+    },
+    markPositions: function () {},
     handleChange: function () {},
     searchLoading: function () {},
     onSearch: function () {},
