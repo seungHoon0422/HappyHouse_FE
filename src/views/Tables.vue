@@ -6,6 +6,57 @@
 <template>
   <div>
     <!-- Authors Table -->
+    <a-row :gutter="24" type="flex" v-if="article.articleno > 0">
+      <a-col :span="24" class="mb-24">
+        <a-card
+          :bordered="false"
+          class="header-solid"
+          :bodyStyle="{ padding: 0 }"
+        >
+          <template #title>
+            <a-row type="flex" align="middle">
+              <a-col :span="24" :md="12">
+                <h5 class="font-semibold m-0">게시글 상세정보</h5>
+              </a-col>
+            </a-row>
+          </template>
+
+          <template>
+            <a-descriptions title="" bordered style="margin: 20px">
+              <a-descriptions-item label="글번호">{{
+                article.articleno
+              }}</a-descriptions-item>
+              <a-descriptions-item label="작성자 이름">{{
+                article.userid
+              }}</a-descriptions-item>
+              <a-descriptions-item label="작성날짜">{{
+                article.regtime
+              }}</a-descriptions-item>
+              <a-descriptions-item label="제목" :span="2">{{
+                article.subject
+              }}</a-descriptions-item>
+              <a-descriptions-item label="조회수">{{
+                article.hit
+              }}</a-descriptions-item>
+              <a-descriptions-item label="내용" :span="3">{{
+                article.content
+              }}</a-descriptions-item>
+            </a-descriptions>
+          </template>
+          <a-row :gutter="24">
+            <a-col :span="18"></a-col>
+            <a-col :span="2" style="margin: 10px">
+              <a-button type="primary" block> 수정 </a-button>
+            </a-col>
+            <a-col :span="2" style="margin: 10px">
+              <a-button type="danger" block @click="deleteArticle">
+                삭제
+              </a-button>
+            </a-col>
+          </a-row>
+        </a-card>
+      </a-col>
+    </a-row>
     <a-row :gutter="24" type="flex">
       <!-- Authors Table Column -->
       <a-col :span="24" class="mb-24">
@@ -13,37 +64,21 @@
         <CardAuthorTable
           :data="table1Data"
           :columns="table1Columns"
+          @selectArticle="selectArticle"
         ></CardAuthorTable>
         <!-- / Authors Table Card -->
       </a-col>
       <!-- / Authors Table Column -->
     </a-row>
     <!-- / Authors Table -->
-
-    <!-- Projects Table -->
-    <a-row :gutter="24" type="flex">
-      <!-- Projects Table Column -->
-      <a-col :span="24" class="mb-24">
-        <!-- Projects Table Column -->
-        <CardProjectTable2
-          :data="table2Data"
-          :columns="table2Columns"
-        ></CardProjectTable2>
-        <!-- / Projects Table Column -->
-      </a-col>
-      <!-- / Projects Table Column -->
-    </a-row>
-    <!-- / Projects Table -->
   </div>
 </template>
 
 <script>
 // "Authors" table component.
 import CardAuthorTable from "../components/Cards/CardAuthorTable";
-
-// "Projects" table component.
-import CardProjectTable2 from "../components/Cards/CardProjectTable2";
-import axios from "axios";
+import CardArticleDetail from "../components/Cards/CardArticleDetail";
+import http from "@/api/http";
 // "Authors" table list of columns and their properties.
 const table1Columns = [
   {
@@ -83,221 +118,53 @@ const table1Columns = [
   },
 ];
 
-// "Authors" table list of rows and their properties.
-const table1Data = [
-  {
-    key: "1",
-    author: {
-      avatar: "images/face-2.jpg",
-      name: "Michael John",
-      email: "michael@mail.com",
-    },
-    func: {
-      job: "Manager",
-      department: "Organization",
-    },
-    status: 1,
-    employed: "23/04/18",
-  },
-  {
-    key: "2",
-    author: {
-      avatar: "images/face-3.jpg",
-      name: "Alexa Liras",
-      email: "alexa@mail.com",
-    },
-    func: {
-      job: "Programator",
-      department: "Developer",
-    },
-    status: 0,
-    employed: "23/12/20",
-  },
-  {
-    key: "3",
-    author: {
-      avatar: "images/face-1.jpg",
-      name: "Laure Perrier",
-      email: "laure@mail.com",
-    },
-    func: {
-      job: "Executive",
-      department: "Projects",
-    },
-    status: 1,
-    employed: "13/04/19",
-  },
-  {
-    key: "4",
-    author: {
-      avatar: "images/face-4.jpg",
-      name: "Miriam Eric",
-      email: "miriam@mail.com",
-    },
-    func: {
-      job: "Marketing",
-      department: "Organization",
-    },
-    status: 1,
-    employed: "03/04/21",
-  },
-  {
-    key: "5",
-    author: {
-      avatar: "images/face-5.jpeg",
-      name: "Richard Gran",
-      email: "richard@mail.com",
-    },
-    func: {
-      job: "Manager",
-      department: "Organization",
-    },
-    status: 0,
-    employed: "23/03/20",
-  },
-  {
-    key: "6",
-    author: {
-      avatar: "images/face-6.jpeg",
-      name: "John Levi",
-      email: "john@mail.com",
-    },
-    func: {
-      job: "Tester",
-      department: "Developer",
-    },
-    status: 0,
-    employed: "14/04/17",
-  },
-];
-
-// "Projects" table list of columns and their properties.
-const table2Columns = [
-  {
-    title: "COMPANIES",
-    dataIndex: "company",
-    scopedSlots: { customRender: "company" },
-    width: 300,
-  },
-  {
-    title: "BUDGET",
-    dataIndex: "budget",
-    class: "font-semibold text-muted",
-  },
-  {
-    title: "STATUS",
-    dataIndex: "status",
-    class: "font-semibold text-muted text-sm",
-  },
-  {
-    title: "COMPLETION",
-    scopedSlots: { customRender: "completion" },
-    dataIndex: "completion",
-  },
-  {
-    title: "",
-    scopedSlots: { customRender: "editBtn" },
-    width: 50,
-  },
-];
-
-// "Projects" table list of rows and their properties.
-const table2Data = [
-  {
-    key: "1",
-    company: {
-      name: "Spotify Version",
-      logo: "images/logos/logo-spotify.svg",
-    },
-    status: "working",
-    budget: "$14,000",
-    completion: 60,
-  },
-  {
-    key: "2",
-    company: {
-      name: "Progress Track",
-      logo: "images/logos/logo-atlassian.svg",
-    },
-    status: "working",
-    budget: "$3,000",
-    completion: 10,
-  },
-  {
-    key: "3",
-    company: {
-      name: "Jira Platform Errors",
-      logo: "images/logos/logo-slack.svg",
-    },
-    status: "done",
-    budget: "Not Set",
-    completion: {
-      status: "success",
-      value: 100,
-    },
-  },
-  {
-    key: "4",
-    company: {
-      name: "Launch new Mobile App",
-      logo: "images/logos/logo-spotify.svg",
-    },
-    status: "canceled",
-    budget: "$20,600",
-    completion: {
-      status: "exception",
-      value: 50,
-    },
-  },
-  {
-    key: "5",
-    company: {
-      name: "Web Dev",
-      logo: "images/logos/logo-webdev.svg",
-    },
-    status: "working",
-    budget: "$4,000",
-    completion: 80,
-  },
-  {
-    key: "6",
-    company: {
-      name: "Redesign Online Store",
-      logo: "images/logos/logo-invision.svg",
-    },
-    status: "canceled",
-    budget: "$2,000",
-    completion: {
-      status: "exception",
-      value: 0,
-    },
-  },
-];
-
 export default {
   components: {
     CardAuthorTable,
-    CardProjectTable2,
+    CardArticleDetail,
   },
   data() {
     return {
       // Associating "Authors" table data with its corresponding property.
-      table1Data: table1Data,
+      table1Data: [],
 
       // Associating "Authors" table columns with its corresponding property.
       table1Columns: table1Columns,
 
-      // Associating "Projects" table data with its corresponding property.
-      table2Data: table2Data,
-
-      // Associating "Projects" table columns with its corresponding property.
-      table2Columns: table2Columns,
+      article: {
+        articleno: 0,
+      },
     };
   },
   created() {
-    axios.get(`http://localhost:9999/server/board`).then(({ data }) => {
-      this.table1Data = data;
-    });
+    this.updateArticles();
+  },
+  methods: {
+    selectArticle(article) {
+      console.log(article, typeof article);
+      this.article = article;
+    },
+
+    deleteArticle() {
+      http.delete(/board/ + this.article.articleno).then(({ data }) => {
+        let msg = "삭제 처리시 문제가 발생했습니다.";
+        if (data === "success") {
+          msg = "삭제가 완료되었습니다.";
+        }
+        alert(msg);
+      });
+      this.article = {};
+      this.table1Data.forEach((element, index) => {
+        if (element.articleno == this.article.articleno) {
+        }
+      });
+    },
+
+    updateArticles() {
+      http.get("/board").then(({ data }) => {
+        this.table1Data = data;
+      });
+    },
   },
 };
 </script>

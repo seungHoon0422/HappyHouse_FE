@@ -12,12 +12,13 @@
           style="display: flex; align-items: center; justify-content: flex-end"
         >
           <a-radio-group v-model="authorsHeaderBtns" size="small">
-            <a-radio-button value="all">번호</a-radio-button>
-            <a-radio-button value="online">조회수</a-radio-button>
+            <a-radio-button value="no">번호</a-radio-button>
+            <a-radio-button value="hit">조회수</a-radio-button>
           </a-radio-group>
         </a-col>
       </a-row>
     </template>
+
     <a-table
       :columns="columns"
       :data-source="data"
@@ -89,29 +90,10 @@
         </a-button>
       </template>
     </a-table>
-    <a-modal v-model="visible" title="게시글 상세정보" @ok="handleOk">
-      <template #footer>
-        <a-button key="back" @click="handleCancel">Return</a-button>
-        <a-button
-          key="submit"
-          type="primary"
-          :loading="loading"
-          @click="handleOk"
-          >Submit</a-button
-        >
-      </template>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-    </a-modal>
   </a-card>
   <!-- / Authors Table Card -->
 </template>
-
 <script>
-import { defineComponent, ref } from "vue";
 var article = {};
 export default {
   props: {
@@ -123,20 +105,21 @@ export default {
       type: Array,
       default: () => [],
     },
-    article: {},
+    article,
   },
   data() {
     return {
       // Active button for the "Authors" table's card header radio button group.
-      authorsHeaderBtns: "all",
+      authorsHeaderBtns: "no",
     };
   },
+  created() {},
   methods: {
     clickrow: function (record, index) {
       return {
         on: {
           click: () => {
-            this.article = record;
+            this.$emit("selectArticle", record);
             console.log("click row", record, this.article);
           },
         },
