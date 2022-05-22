@@ -1,7 +1,7 @@
 <template>
   <div>
-    <a-row :gutter="24">
-      <a-col :span="12" style="padding: 20px">
+    <a-row type="flex" :gutter="24">
+      <a-col :span="12">
         <a-card
           :bordered="false"
           class="header-solid"
@@ -14,7 +14,12 @@
               </a-col>
             </a-row>
           </template>
-          <a-table :columns="columns" :data-source="data" :pagination="true">
+          <a-table
+            :columns="columns"
+            :data-source="data"
+            :pagination="true"
+            :customRow="clickrow"
+          >
             <template slot="no" slot-scope="no">
               <div class="author-info">
                 <h6 class="m-0">{{ no }}</h6>
@@ -25,7 +30,9 @@
               <div class="table-avatar-info">
                 <!-- <a-avatar shape="square" :src="author.avatar" /> -->
                 <div class="avatar-info">
-                  <h6>{{ aptName }}</h6>
+                  <a>
+                    <h6>{{ aptName }}</h6>
+                  </a>
                   <!-- <p>{{ userid }}</p> -->
                 </div>
               </div>
@@ -42,15 +49,20 @@
           </a-table>
         </a-card>
       </a-col>
-      <a-col :span="12"> 매매 상세페이지 </a-col>
+      <a-col :span="12">
+        <house-detail-table :detailInfo="detailInfo"></house-detail-table>
+      </a-col>
     </a-row>
   </div>
 </template>
 
 <script>
+import HouseDetailTable from "./HouseDetailTable.vue";
+
+var details = {};
 export default {
   name: "MuseVueAntDesignDashboardMainDrawHouseTable",
-
+  components: { HouseDetailTable },
   props: ["data"],
   data() {
     return {
@@ -71,6 +83,10 @@ export default {
           scopedSlots: { customRender: "dealAmount" },
         },
       ],
+      detailInfo: {
+        no: "-",
+        aptName: "-",
+      },
     };
   },
 
@@ -79,7 +95,21 @@ export default {
     console.log("table items ", this.$props.data);
   },
 
-  methods: {},
+  methods: {
+    clickrow: function (record, index) {
+      return {
+        on: {
+          click: () => {
+            details = record;
+            console.log(details);
+            this.detailInfo = record;
+            this.$emit("clickRecord", record);
+            console.log("detail info", this.detailInfo);
+          },
+        },
+      };
+    },
+  },
 };
 </script>
 

@@ -122,7 +122,11 @@
     <!--------------------------------- /kakao map  --------------------------------->
 
     <!--------------------------------- table  --------------------------------->
-    <draw-house-table :data="data"></draw-house-table>
+    <a-row type="flex" :gutter="24">
+      <a-col :span="24">
+        <draw-house-table :data="data"></draw-house-table>
+      </a-col>
+    </a-row>
     <!--------------------------------- /table  --------------------------------->
 
     <a-row type="flex" :gutter="24">
@@ -340,6 +344,7 @@ export default {
       floorFilter: "0",
       dealAmountFilter: "0",
       data: [],
+      clickRecord: {},
     };
   }, // end of data
   created() {
@@ -361,6 +366,13 @@ export default {
     infos: function (curr, prev) {
       this.eraseMarkers();
       this.updateMarkers();
+    },
+    clickRecord: function () {
+      let position = new kakao.maps.LatLng(
+        this.clickRecord.lat,
+        this.clickRecord.lng
+      );
+      this.map.setCenter(position);
     },
   },
   methods: {
@@ -468,6 +480,7 @@ export default {
         element.setMap(null);
       });
     },
+
     markPositions: function () {},
     handleChange: function () {},
     searchLoading: function () {},
