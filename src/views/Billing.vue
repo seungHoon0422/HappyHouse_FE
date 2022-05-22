@@ -486,7 +486,7 @@ export default {
             if (status === kakao.maps.services.Status.OK) {
               var position = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-              var imageSrc = "images/starbucks_icon.png",
+              var imageSrc = "images/starbucks-icon.png",
                 imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기입니다
                 imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
@@ -507,8 +507,6 @@ export default {
                 info: element,
                 marker: marker,
               });
-
-              marker.setMap(map);
 
               var iwContent =
                 '<div style="padding:5px;">' +
@@ -535,6 +533,8 @@ export default {
                 // 클릭한 위도, 경도 정보를 가져옵니다
                 map.setCenter(marker.getPosition());
               });
+              marker.setMap(map);
+
               if (index == 0) map.setCenter(position);
             }
           });

@@ -18,7 +18,12 @@
         </a-col>
       </a-row>
     </template>
-    <a-table :columns="columns" :data-source="data" :pagination="true">
+    <a-table
+      :columns="columns"
+      :data-source="data"
+      :pagination="true"
+      :customRow="clickrow"
+    >
       <template slot="articleno" slot-scope="articleno">
         <div class="author-info">
           <h6 class="m-0">{{ articleno }}</h6>
@@ -84,11 +89,30 @@
         </a-button>
       </template>
     </a-table>
+    <a-modal v-model="visible" title="게시글 상세정보" @ok="handleOk">
+      <template #footer>
+        <a-button key="back" @click="handleCancel">Return</a-button>
+        <a-button
+          key="submit"
+          type="primary"
+          :loading="loading"
+          @click="handleOk"
+          >Submit</a-button
+        >
+      </template>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-modal>
   </a-card>
   <!-- / Authors Table Card -->
 </template>
 
 <script>
+import { defineComponent, ref } from "vue";
+var article = {};
 export default {
   props: {
     data: {
@@ -99,12 +123,25 @@ export default {
       type: Array,
       default: () => [],
     },
+    article: {},
   },
   data() {
     return {
       // Active button for the "Authors" table's card header radio button group.
       authorsHeaderBtns: "all",
     };
+  },
+  methods: {
+    clickrow: function (record, index) {
+      return {
+        on: {
+          click: () => {
+            this.article = record;
+            console.log("click row", record, this.article);
+          },
+        },
+      };
+    },
   },
 };
 </script>

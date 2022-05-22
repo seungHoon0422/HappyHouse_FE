@@ -17,7 +17,7 @@
     :style="{ backgroundColor: 'transparent' }"
   >
     <div class="brand">
-      <img src="images/logo-ct-black.png" alt="" /> <span>Muse Dashboard</span>
+      <img src="images/logo-ct-black.png" alt="" /> <span>Happy House</span>
     </div>
     <hr />
 
@@ -100,7 +100,7 @@
           <span class="label">kakao map</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item>
+      <!-- <a-menu-item>
         <router-link to="/rtl">
           <span class="icon">
             <svg
@@ -120,7 +120,7 @@
           </span>
           <span class="label">RTL</span>
         </router-link>
-      </a-menu-item>
+      </a-menu-item> -->
       <a-menu-item class="menu-item-header"> Account Pages </a-menu-item>
       <a-menu-item>
         <router-link to="/profile">
