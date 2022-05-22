@@ -50,7 +50,10 @@
         </a-card>
       </a-col>
       <a-col :span="12">
-        <house-detail-table :detailInfo="detailInfo"></house-detail-table>
+        <house-detail-table
+          :detailInfo="detailInfo"
+          @clickRecord="clickRecord"
+        ></house-detail-table>
       </a-col>
     </a-row>
   </div>
@@ -108,6 +111,9 @@ export default {
           },
         },
       };
+    },
+    clickRecord(record) {
+      this.$emit("clickRecord", record);
     },
   },
 };

@@ -124,7 +124,10 @@
     <!--------------------------------- table  --------------------------------->
     <a-row type="flex" :gutter="24">
       <a-col :span="24">
-        <draw-house-table :data="data"></draw-house-table>
+        <draw-house-table
+          :data="data"
+          @clickRecord="clickRecord"
+        ></draw-house-table>
       </a-col>
     </a-row>
     <!--------------------------------- /table  --------------------------------->
@@ -344,7 +347,6 @@ export default {
       floorFilter: "0",
       dealAmountFilter: "0",
       data: [],
-      clickRecord: {},
     };
   }, // end of data
   created() {
@@ -367,7 +369,8 @@ export default {
       this.eraseMarkers();
       this.updateMarkers();
     },
-    clickRecord: function () {
+    clickRecord: function (record) {
+      console.log("clickrecord : ", record);
       let position = new kakao.maps.LatLng(
         this.clickRecord.lat,
         this.clickRecord.lng
@@ -480,7 +483,11 @@ export default {
         element.setMap(null);
       });
     },
-
+    clickRecord(record) {
+      console.log("click reord", record);
+      let position = new kakao.maps.LatLng(record.lat, record.lng);
+      this.map.setCenter(position);
+    },
     markPositions: function () {},
     handleChange: function () {},
     searchLoading: function () {},
