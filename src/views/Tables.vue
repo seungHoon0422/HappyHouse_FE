@@ -46,10 +46,10 @@
           <a-row :gutter="24">
             <a-col :span="18"></a-col>
             <a-col :span="2" style="margin: 10px">
-              <a-button type="primary" block> 수정 </a-button>
+              <a-button type="primary" block ghost> 수정 </a-button>
             </a-col>
             <a-col :span="2" style="margin: 10px">
-              <a-button type="danger" block @click="deleteArticle">
+              <a-button type="danger" block ghost @click="deleteArticle">
                 삭제
               </a-button>
             </a-col>
@@ -146,20 +146,24 @@ export default {
     },
 
     deleteArticle() {
+      console.log("delete article ", this.article.articleno);
       http.delete(/board/ + this.article.articleno).then(({ data }) => {
         let msg = "삭제 처리시 문제가 발생했습니다.";
         if (data === "success") {
           msg = "삭제가 완료되었습니다.";
+          this.deleteTableArticle();
         }
         alert(msg);
       });
-      this.article = {};
+    },
+    deleteTableArticle() {
       this.table1Data.forEach((element, index) => {
         if (element.articleno == this.article.articleno) {
+          this.table1Data.splice(index, 1);
+          this.article = {};
         }
       });
     },
-
     updateArticles() {
       http.get("/board").then(({ data }) => {
         this.table1Data = data;

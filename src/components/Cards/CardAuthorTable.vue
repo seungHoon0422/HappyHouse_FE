@@ -21,22 +21,15 @@
 
     <a-table
       :columns="columns"
-      :data-source="data"
+      :data-source="tableData"
       :pagination="true"
       :customRow="clickrow"
     >
       <template slot="articleno" slot-scope="articleno">
         <div class="author-info">
           <h6 class="m-0">{{ articleno }}</h6>
-          <!-- <p class="m-0 font-regular text-muted">{{ articleno }}</p> -->
         </div>
       </template>
-      <!-- <template slot="func" slot-scope="func">
-        <div class="author-info">
-          <h6 class="m-0">{{ func.job }}</h6>
-          <p class="m-0 font-regular text-muted">{{ func.department }}</p>
-        </div>
-      </template> -->
 
       <template slot="userid" slot-scope="userid">
         <div class="table-avatar-info">
@@ -74,16 +67,6 @@
           </div>
         </div>
       </template>
-
-      <!-- <template slot="status" slot-scope="status">
-        <a-tag
-          class="tag-status"
-          :class="status ? 'ant-tag-primary' : 'ant-tag-muted'"
-        >
-          {{ status ? "ONLINE" : "OFFLINE" }}
-        </a-tag>
-      </template> -->
-
       <template slot="editBtn" slot-scope="row">
         <a-button type="link" :data-id="row.key" class="btn-edit">
           Edit
@@ -107,11 +90,19 @@ export default {
     },
     article,
   },
+
   data() {
     return {
       // Active button for the "Authors" table's card header radio button group.
       authorsHeaderBtns: "no",
+      tableData: [],
     };
+  },
+
+  watch: {
+    data: function (newData, oldData) {
+      this.tableData = newData;
+    },
   },
   created() {},
   methods: {
