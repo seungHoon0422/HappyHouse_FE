@@ -31,10 +31,6 @@
               justify-content: flex-end;
             "
           >
-            <a-radio-group v-model="profileHeaderBtns" size="small">
-              <a-radio-button value="overview">OVERVIEW</a-radio-button>
-              <a-radio-button value="teams">TEAMS</a-radio-button>
-            </a-radio-group>
           </a-col>
         </a-row>
       </template>
@@ -57,11 +53,11 @@
 </template>
 
 <script>
+import http from "@/api/http";
 import CardProfileInformation from "../components/Cards/CardProfileInformation";
 import CardProfileInterest from "../components/Cards/CardProfileInterest";
 import { mapState } from "vuex";
 const memberStore = "memberStore";
-
 export default {
   components: {
     CardProfileInformation,
@@ -72,12 +68,19 @@ export default {
       // Active button for the "User Profile" card's radio button group.
       profileHeaderBtns: "overview",
       userlevel: "",
+      tableData: [],
     };
   },
   created() {
     if (this.userInfo === null) this.$router.push({ name: "Sign-In" });
     if (this.userInfo.level === 1) this.userlevel = "중개사무소 ";
     if (this.userInfo.level === 0) this.userlevel = "일반사용자";
+    let userid = this.userInfo.userid;
+    http.get("/interest/" + userid).then(({ data }) => {
+      console.log(data);
+      this.tableData = data;
+      console.log(this.tableData);
+    });
   },
   computed: {
     ...mapState(memberStore, ["userInfo"]),

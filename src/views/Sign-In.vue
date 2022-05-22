@@ -67,8 +67,12 @@
             </a-button>
           </a-form-item>
         </a-form>
+        <p class="font-semibold text-muted">
+          <router-link to="/FindUser" class="font-bold text-dark"
+            >아이디 / 비밀번호 찾기</router-link
+          >
+        </p>
         <!-- / Sign In Form -->
-
         <p class="font-semibold text-muted">
           Don't have an account?
           <router-link to="/sign-up" class="font-bold text-dark"
