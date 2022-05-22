@@ -1,6 +1,6 @@
 <template>
   <div class="mb-24">
-    <a-row>
+    <a-row style="margin: 20px">
       <a-card
         :bordered="false"
         class="header-solid"
@@ -23,14 +23,14 @@
             buildYear
           }}</a-descriptions-item>
           <a-descriptions-item label="매매 가격">{{
-            dealAmount
+            dealAmount | comma
           }}</a-descriptions-item>
         </a-descriptions>
       </a-card>
     </a-row>
     <a-row>
       <a-col :span="24" align="middle">
-        <a-button type="primary" style="margin: 10px"
+        <a-button type="primary" style="margin: 10px" @click="clickStarbucks"
           >스타벅스 매장 보러가기</a-button
         >
         <a-button type="primary" style="margin: 10px">관심등록</a-button>
@@ -58,6 +58,15 @@ export default {
       buildYear: "",
     };
   },
+  filters: {
+    comma(val) {
+      if (val == "") return "";
+      return (
+        (val + "0000").replace(",", "").replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+        "원"
+      );
+    },
+  },
 
   watch: {
     detailInfo() {
@@ -78,7 +87,12 @@ export default {
   },
   mounted() {},
 
-  methods: {},
+  methods: {
+    clickStarbucks() {
+      console.log("clickStarbucks");
+      this.$emit("showStarbucks", this.detailInfo);
+    },
+  },
 };
 </script>
 

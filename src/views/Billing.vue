@@ -127,72 +127,11 @@
         <draw-house-table
           :data="data"
           @clickRecord="clickRecord"
+          @showStarbucks="showStarbucks"
         ></draw-house-table>
       </a-col>
     </a-row>
     <!--------------------------------- /table  --------------------------------->
-
-    <a-row type="flex" :gutter="24">
-      <!-- Billing Info Column -->
-      <a-col :span="24" :md="16">
-        <a-row type="flex" :gutter="24">
-          <a-col :span="24" :xl="12" class="mb-24">
-            <!-- Master Card -->
-            <CardCredit></CardCredit>
-            <!-- / Master Card -->
-          </a-col>
-          <a-col
-            :span="12"
-            :xl="6"
-            class="mb-24"
-            v-for="(salary, index) in salaries"
-            :key="index"
-          >
-            <!-- Salary Card -->
-            <WidgetSalary
-              :value="salary.value"
-              :prefix="salary.prefix"
-              :icon="salary.icon"
-              :title="salary.title"
-              :content="salary.content"
-            ></WidgetSalary>
-            <!-- / Salary Card -->
-          </a-col>
-          <a-col :span="24" class="mb-24">
-            <!-- Payment Methods Card -->
-            <CardPaymentMethods></CardPaymentMethods>
-            <!-- Payment Methods Card -->
-          </a-col>
-        </a-row>
-      </a-col>
-      <!-- / Billing Info Column -->
-
-      <!-- Invoices Column -->
-      <a-col :span="24" :md="8" class="mb-24">
-        <!-- Invoices Card -->
-        <CardInvoices :data="invoiceData"></CardInvoices>
-        <!-- / Invoices Card -->
-      </a-col>
-      <!-- / Invoices Column -->
-    </a-row>
-
-    <a-row type="flex" :gutter="24">
-      <!-- Billing Information Column -->
-      <a-col :span="24" :md="16" class="mb-24">
-        <!-- Billing Information Card -->
-        <CardBillingInfo></CardBillingInfo>
-        <!-- / Billing Information Card -->
-      </a-col>
-      <!-- Billing Information Column -->
-
-      <!-- Your Transactions Column -->
-      <a-col :span="24" :md="8" class="mb-24">
-        <!-- Your Transactions Card -->
-        <CardTransactions :data="transactionsData"></CardTransactions>
-        <!-- / Your Transactions Card -->
-      </a-col>
-      <!-- / Your Transactions Column -->
-    </a-row>
   </div>
 </template>
 
@@ -205,6 +144,9 @@ import CardBillingInfo from "../components/Cards/CardBillingInfo";
 import CardTransactions from "../components/Cards/CardTransactions";
 import DrawHouseTable from "../components/MapComponent/DrawHouseTable";
 import http from "@/api/http";
+
+var map;
+var starbucksMarkers = [];
 // Salary cards data
 const salaries = [
   {
@@ -330,10 +272,8 @@ export default {
       map: null,
       markers: [],
       markerArr: [],
-      markerPositions: [],
-      markerSet: [],
+      starbucksMarkers: [],
       centerSetting: false,
-      starbucksList: [],
       sidoList: [{ code: "default", name: "시/도 선택" }],
       sidocode: "default",
       gugunList: [{ code: "default", name: "구/군 선택" }],
@@ -388,6 +328,7 @@ export default {
         level: 4, //지도의 레벨(확대, 축소 정도)
       };
       this.map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+      map = this.map;
     },
     getSidoList() {
       console.log("get sido list");
@@ -445,6 +386,8 @@ export default {
     updateMarkers: function () {
       console.log("update markers", this.infos);
       this.markers = [];
+
+      // 중복 마커 생성 방지
       let uniqueAptCodes = [];
       this.infos.forEach((element) => {
         const aptcode = element.aptCode;
@@ -460,18 +403,57 @@ export default {
     positionMarkers: function () {
       this.markers.forEach((element, index) => {
         let position = new kakao.maps.LatLng(element.lat, element.lng);
-        let marker = new kakao.maps.Marker({
-          map: this.map,
+
+        var imageSrc = "images/house.png",
+          imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기입니다
+          imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+        // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+        var markerImage = new kakao.maps.MarkerImage(
+          imageSrc,
+          imageSize,
+          imageOption
+        );
+
+        var marker = new kakao.maps.Marker({
+          map: map,
           position: position,
+          image: markerImage,
+          info: element,
+          clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
         });
-        this.markerArr.push(marker);
-        marker.setMap(this.map);
+
+        var iwContent =
+          '<div style="width:150px; padding:5px; text-align : center"><strong>' +
+          element.aptName +
+          "</strong><br>" +
+          element.dongName +
+          "<br>" +
+          "</div>"; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+        // 인포윈도우를 생성합니다
         var infowindow = new kakao.maps.InfoWindow({
-          content:
-            '<div style="width:200px;text-align:center;padding:6px 0;">' +
-            element.aptName +
-            "</div>",
+          content: iwContent,
+          removable: true,
         });
+        kakao.maps.event.addListener(marker, "mouseover", function () {
+          // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+          infowindow.open(map, marker);
+        });
+
+        // 마커에 마우스아웃 이벤트를 등록합니다
+        kakao.maps.event.addListener(marker, "mouseout", function () {
+          // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+          infowindow.close();
+        });
+
+        kakao.maps.event.addListener(marker, "click", function () {
+          // 클릭한 위도, 경도 정보를 가져옵니다
+          map.setCenter(marker.getPosition());
+        });
+
+        marker.setMap(map);
+        this.markerArr.push(marker);
         if (index == 0) this.map.setCenter(position);
       });
     },
@@ -482,17 +464,95 @@ export default {
       this.markerArr.forEach((element) => {
         element.setMap(null);
       });
+      starbucksMarkers.forEach((element) => {
+        element.marker.setMap(null);
+      });
     },
     clickRecord(record) {
       console.log("click reord", record);
       let position = new kakao.maps.LatLng(record.lat, record.lng);
       this.map.setCenter(position);
     },
-    markPositions: function () {},
-    handleChange: function () {},
-    searchLoading: function () {},
-    onSearch: function () {},
-    change: function () {},
+
+    showStarbucks(info) {
+      this.eraseStarbucksMarker();
+      http.get("/starbucks/search/" + info.dongCode).then(({ data }) => {
+        console.log("starbucks list", data);
+        var geocoder = new kakao.maps.services.Geocoder();
+        data.forEach((element, index) => {
+          const address = element.address;
+          geocoder.addressSearch(address, function (result, status) {
+            // 정상적으로 검색이 완료됐으면
+            if (status === kakao.maps.services.Status.OK) {
+              var position = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+              var imageSrc = "images/starbucks_icon.png",
+                imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기입니다
+                imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+              // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+              var markerImage = new kakao.maps.MarkerImage(
+                imageSrc,
+                imageSize,
+                imageOption
+              );
+
+              var marker = new kakao.maps.Marker({
+                map: map,
+                position: position,
+                image: markerImage,
+              });
+
+              starbucksMarkers.push({
+                info: element,
+                marker: marker,
+              });
+
+              marker.setMap(map);
+
+              var iwContent =
+                '<div style="padding:5px;">' +
+                element.name +
+                "<br>" +
+                element.address +
+                "</div>"; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+              // 인포윈도우를 생성합니다
+              var infowindow = new kakao.maps.InfoWindow({
+                content: iwContent,
+              });
+              kakao.maps.event.addListener(marker, "mouseover", function () {
+                // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                infowindow.open(map, marker);
+              });
+
+              // 마커에 마우스아웃 이벤트를 등록합니다
+              kakao.maps.event.addListener(marker, "mouseout", function () {
+                // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+                infowindow.close();
+              });
+              kakao.maps.event.addListener(marker, "click", function () {
+                // 클릭한 위도, 경도 정보를 가져옵니다
+                map.setCenter(marker.getPosition());
+              });
+              if (index == 0) map.setCenter(position);
+            }
+          });
+        });
+      });
+    },
+
+    eraseStarbucksMarker() {
+      starbucksMarkers.forEach((element) => {
+        element.marker.setMap(null);
+      });
+      starbucksMarkers = [];
+    },
+    // markPositions: function () {},
+    // handleChange: function () {},
+    // searchLoading: function () {},
+    // onSearch: function () {},
+    // change: function () {},
   },
 }; // end of export
 </script>

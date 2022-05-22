@@ -53,6 +53,7 @@
         <house-detail-table
           :detailInfo="detailInfo"
           @clickRecord="clickRecord"
+          @showStarbucks="showStarbucks"
         ></house-detail-table>
       </a-col>
     </a-row>
@@ -114,6 +115,9 @@ export default {
     },
     clickRecord(record) {
       this.$emit("clickRecord", record);
+    },
+    showStarbucks(info) {
+      this.$emit("showStarbucks", info);
     },
   },
 };
