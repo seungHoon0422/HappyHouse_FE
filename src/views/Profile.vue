@@ -46,7 +46,10 @@
 
       <a-col :span="24" :md="15" class="mb-24">
         <!--관심목록-->
-        <CardProfileInterest></CardProfileInterest>
+        <CardProfileInterest
+          :data="tableData"
+          :column="columns"
+        ></CardProfileInterest>
       </a-col>
     </a-row>
   </div>
@@ -58,6 +61,18 @@ import CardProfileInformation from "../components/Cards/CardProfileInformation";
 import CardProfileInterest from "../components/Cards/CardProfileInterest";
 import { mapState } from "vuex";
 const memberStore = "memberStore";
+const columns = [
+  {
+    title: "아파트 명",
+    dataIndex: "aptname",
+    scopedSlots: { customRender: "aptname" },
+  },
+  {
+    title: "삭제",
+    dataIndex: "delete",
+    scopedSlots: { customRender: "delete" },
+  },
+];
 export default {
   components: {
     CardProfileInformation,
@@ -69,6 +84,7 @@ export default {
       profileHeaderBtns: "overview",
       userlevel: "",
       tableData: [],
+      columns: columns,
     };
   },
   created() {
@@ -78,7 +94,10 @@ export default {
     let userid = this.userInfo.userid;
     http.get("/interest/" + userid).then(({ data }) => {
       console.log(data);
-      this.tableData = data;
+      data.forEach((element, index) => {
+        this.tableData.push({ title: element, key: index });
+      });
+      // this.tableData = data;
       console.log(this.tableData);
     });
   },

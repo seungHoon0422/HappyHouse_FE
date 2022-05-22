@@ -45,6 +45,7 @@
       <a-input v-model="username" addon-before="이메일" />
       <a-input v-model="username" addon-before="전화번호" />
     </a-modal> -->
+
     <a-descriptions :column="1" class="text-center">
       <a-descriptions-item label="이름">
         {{ userInfo.username }}
@@ -84,7 +85,6 @@ export default {
   data() {
     return {
       visible: false,
-      username: "",
     };
   },
   computed: {
