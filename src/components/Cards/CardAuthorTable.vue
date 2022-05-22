@@ -42,10 +42,8 @@
       </template>
       <template slot="subject" slot-scope="subject">
         <div class="table-avatar-info">
-          <!-- <a-avatar shape="square" :src="author.avatar" /> -->
           <div class="avatar-info">
             <h6>{{ subject }}</h6>
-            <!-- <p>{{ userid }}</p> -->
           </div>
         </div>
       </template>
