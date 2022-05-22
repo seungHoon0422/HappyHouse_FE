@@ -51,7 +51,6 @@
 
 <script>
 import http from "@/api/http";
-import { EvalSourceMapDevToolPlugin } from "webpack";
 export default {
   data() {
     return {
