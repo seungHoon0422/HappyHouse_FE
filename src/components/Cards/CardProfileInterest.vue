@@ -28,17 +28,12 @@
         <h6 class="m-0">{{ data.title }}</h6>
       </template>
     </a-table> -->
-    <h2>{{ data }}</h2>
-    <a-table
-      :columns="columns"
-      :data-source="data"
-      :pagination="false"
-      :ow-key="key"
-    >
-      <template slot="title" slot-scope="title">
+
+    <a-table :columns="columns" :data-source="data" :pagination="false">
+      <template slot="aptname" slot-scope="aptname">
         <div class="table-avatar-info">
           <div class="avatar-info">
-            <h6>{{ title }}</h6>
+            <h6>{{ aptname }}</h6>
           </div>
         </div>
       </template>

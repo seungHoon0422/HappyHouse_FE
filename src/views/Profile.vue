@@ -48,7 +48,7 @@
         <!--관심목록-->
         <CardProfileInterest
           :data="tableData"
-          :column="columns"
+          :columns="columns"
         ></CardProfileInterest>
       </a-col>
     </a-row>
@@ -95,7 +95,7 @@ export default {
     http.get("/interest/" + userid).then(({ data }) => {
       console.log(data);
       data.forEach((element, index) => {
-        this.tableData.push({ title: element, key: index });
+        this.tableData.push({ aptname: element, key: index });
       });
       // this.tableData = data;
       console.log(this.tableData);
