@@ -16,7 +16,7 @@
           no-repeat center;
         background-size: cover;
         text-align: center;
-        justify-content: flex-end;
+        justify-content: center;
       "
     >
       <div class="bg">
@@ -42,7 +42,7 @@
             "
           >
             <router-link to="/billing">
-              <a-button shape="round" block>내집 찾으러 가자~</a-button>
+              <a-button shape="round" block class="bolder">Find House</a-button>
             </router-link>
           </div>
         </a-col>
