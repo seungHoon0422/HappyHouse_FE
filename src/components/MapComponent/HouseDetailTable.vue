@@ -33,9 +33,15 @@
         <a-button type="primary" style="margin: 10px" @click="clickStarbucks"
           >스타벅스 매장 보러가기</a-button
         >
-        <a-button type="primary" style="margin: 10px" @click="interestplus"
+
+        <a-button
+          v-if="isFirst"
+          type="primary"
+          style="margin: 10px"
+          @click="interestplus"
           >관심등록</a-button
         >
+        <p v-if="!isFirst">관심 등록한 매물입니다.</p>
       </a-col>
     </a-row>
   </div>
@@ -51,6 +57,9 @@ export default {
 
   props: {
     detailInfo: {},
+    isFirst: {
+      type: Boolean,
+    },
   },
   data() {
     return {
@@ -111,14 +120,10 @@ export default {
           return;
         }
       } else {
-        console.log(this.detailInfo.aptCode + " " + this.userInfo.userid);
+        let userid = this.userInfo.userid;
+        let aptCode = this.detailInfo.aptCode;
         http
-          .post("/interest/regist", null, {
-            params: {
-              userid: this.userInfo.userid,
-              aptCode: this.detailInfo.aptCode,
-            },
-          })
+          .get("/interest/regist/" + userid + "/" + aptCode)
           .then(({ data }) => {
             console.log(data);
             alert("관심목록에 추가되었습니다.");

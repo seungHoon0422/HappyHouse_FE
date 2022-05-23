@@ -54,6 +54,7 @@
           :detailInfo="detailInfo"
           @clickRecord="clickRecord"
           @showStarbucks="showStarbucks"
+          :isFirst="isFirst"
         ></house-detail-table>
       </a-col>
     </a-row>
@@ -61,7 +62,10 @@
 </template>
 
 <script>
+import http from "@/api/http";
 import HouseDetailTable from "./HouseDetailTable.vue";
+import { mapState } from "vuex";
+const memberStore = "memberStore";
 
 var details = {};
 export default {
@@ -70,6 +74,7 @@ export default {
   props: ["data"],
   data() {
     return {
+      isFirst: true,
       columns: [
         {
           title: "거래번호",
@@ -93,13 +98,16 @@ export default {
       },
     };
   },
-
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
   created() {},
   mounted() {
     console.log("table items ", this.$props.data);
   },
 
   methods: {
+    // <!--아파트 하나 행 선택 클릭-->
     clickrow: function (record, index) {
       return {
         on: {
@@ -109,6 +117,25 @@ export default {
             this.detailInfo = record;
             this.$emit("clickRecord", record);
             console.log("detail info", this.detailInfo);
+            console.log(
+              "관심등록한적있는지 ? " +
+                this.userInfo.userid +
+                " " +
+                this.detailInfo.aptCode
+            );
+            let userid = this.userInfo.userid;
+            let aptCode = this.detailInfo.aptCode;
+            http
+              .get("/interest/already/" + userid + "/" + aptCode)
+              .then(({ data }) => {
+                if (data === 0) {
+                  console.log("아직 등록한 적 없는 매물 ");
+                  this.isFirst = true;
+                } else {
+                  console.log("등록한 적 있는 관심매물");
+                  this.isFirst = false;
+                }
+              });
           },
         },
       };
