@@ -46,7 +46,16 @@
           <a-row :gutter="24" v-if="userInfo && userInfo.level >= 2">
             <a-col :span="18"></a-col>
             <a-col :span="2" style="margin: 10px">
-              <a-button type="primary" block ghost> 수정 </a-button>
+              <router-link
+                :to="{
+                  name: 'modifyArticle',
+                  params: { articleno: article.articleno },
+                }"
+              >
+                <a-button type="primary" block ghost @click="updatearticle">
+                  수정
+                </a-button>
+              </router-link>
             </a-col>
             <a-col :span="2" style="margin: 10px">
               <a-button type="danger" block ghost @click="deleteArticle">
@@ -139,7 +148,14 @@ export default {
   methods: {
     selectArticle(article) {
       console.log(article, typeof article);
-      this.article = article;
+      http.put("/board/hit/" + article.articleno).then(({ data }) => {
+        if (data == "success") {
+          console.log("hit increase");
+          this.updateArticles();
+          article.hit = article.hit + 1;
+          this.article = article;
+        }
+      });
     },
 
     deleteArticle() {
@@ -165,6 +181,9 @@ export default {
       http.get("/board").then(({ data }) => {
         this.table1Data = data;
       });
+    },
+    updatearticle() {
+      console.log(this.article.articleno);
     },
   },
 };

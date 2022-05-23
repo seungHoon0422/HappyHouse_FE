@@ -38,9 +38,16 @@ let routes = [
   },
   {
     path: "/table/regist",
-    name: "FAQ ",
+    name: "registArticle",
     layout: "dashboard",
     component: () => import("../views/RegistArticle.vue"),
+  },
+  {
+    path: "/table/modify/:articleno",
+    name: "modifyArticle",
+    layout: "dashboard",
+    component: () => import("../views/ModifyArticle.vue"),
+    props: true,
   },
   {
     path: "/billing",

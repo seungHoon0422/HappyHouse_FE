@@ -12,8 +12,12 @@
           style="display: flex; align-items: center; justify-content: flex-end"
         >
           <a-radio-group v-model="authorsHeaderBtns" size="small">
-            <a-radio-button value="no">번호</a-radio-button>
-            <a-radio-button value="hit">조회수</a-radio-button>
+            <a-radio-button value="no" @click="recentArticleSort"
+              >최신글</a-radio-button
+            >
+            <a-radio-button value="hit" @click="hitDescendSort"
+              >조회수</a-radio-button
+            >
           </a-radio-group>
         </a-col>
       </a-row>
@@ -130,6 +134,14 @@ export default {
           },
         },
       };
+    },
+    recentArticleSort() {
+      console.log("recent articleno sort");
+      this.tableData.sort((a, b) => b.articleno - a.articleno);
+    },
+    hitDescendSort() {
+      console.log("hit descend sort");
+      this.tableData.sort((a, b) => b.hit - a.hit);
     },
   },
 };
