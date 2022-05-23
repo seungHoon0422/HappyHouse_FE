@@ -1,7 +1,3 @@
-<!-- 
-	This is the billing page, it uses the dashboard layout in: 
-	"./layouts/Dashboard.vue" .
- -->
 
 <template>
   <div>

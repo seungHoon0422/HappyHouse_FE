@@ -15,7 +15,7 @@
       <a-table
         :columns="columns"
         :data-source="data"
-        :pagination="false"
+        :pagination="true"
         :customRow="clickrow"
       >
         <template slot="aptname" slot-scope="aptname">

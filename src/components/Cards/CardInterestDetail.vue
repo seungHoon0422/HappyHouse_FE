@@ -40,7 +40,7 @@
       </div>
     </template>
     <br />
-    <a-table :columns="columns" :data-source="data" :pagination="false">
+    <a-table :columns="columns" :data-source="data" :pagination="true">
     </a-table>
   </a-card>
 </template>

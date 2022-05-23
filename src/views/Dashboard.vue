@@ -54,14 +54,14 @@
                   title="공지사항"
                   :bordered="true"
                   style="margin-top: 30%; margin-left: auto; margin-right: auto"
-                  :size="small"
+                  size="small"
                 >
                   <template #extra><a href="#/tables">more</a></template>
                   <a-table
                     :dataSource="articleItems"
                     :columns="columns"
                     :pagination="false"
-                    :size="small"
+                    size="small"
                   />
                 </a-card>
               </a-row>
@@ -74,14 +74,14 @@
                   title="NEWS"
                   :bordered="true"
                   style="margin-top: 30%; margin-left: auto; margin-right: auto"
-                  :size="small"
+                  size="small"
                 >
                   <template #extra><a href="#/tables">more</a></template>
                   <a-table
                     :dataSource="articleItems"
                     :columns="columns"
                     :pagination="false"
-                    :size="small"
+                    size="small"
                   />
                 </a-card>
               </a-row>
@@ -91,97 +91,13 @@
         </a-row>
       </a-row>
     </a-row>
-
-    <!-- <a-row :gutter="24">
-      <a-col
-        :span="24"
-        :lg="12"
-        :xl="6"
-        class="mb-24"
-        v-for="(stat, index) in stats"
-        :key="index"
-      >
-        <WidgetCounter
-          :title="stat.title"
-          :value="stat.value"
-          :prefix="stat.prefix"
-          :suffix="stat.suffix"
-          :icon="stat.icon"
-          :status="stat.status"
-        ></WidgetCounter>
-      </a-col>
-    </a-row> -->
-
-    <!-- Charts -->
-    <!-- <a-row :gutter="24" type="flex" align="stretch">
-      <a-col :span="24" :lg="10" class="mb-24">
-        <CardBarChart></CardBarChart>
-      </a-col>
-      <a-col :span="24" :lg="14" class="mb-24">
-        <CardLineChart></CardLineChart>
-      </a-col>
-    </a-row> -->
-    <!-- / Charts -->
-
-    <!-- Table & Timeline -->
-    <!-- <a-row :gutter="24" type="flex" align="stretch">
-      <a-col :span="24" :lg="16" class="mb-24">
-        <CardProjectTable
-          :data="tableData"
-          :columns="tableColumns"
-        ></CardProjectTable>
-      </a-col>
-
-      <a-col :span="24" :lg="8" class="mb-24">
-        <CardOrderHistory></CardOrderHistory>
-      </a-col>
-    </a-row> -->
-    <!-- / Table & Timeline -->
-
-    <!-- Cards -->
-    <!-- <a-row :gutter="24" type="flex" align="stretch">
-      <a-col :span="24" :xl="14" class="mb-24">
-        <CardInfo></CardInfo>
-      </a-col>
-      <a-col :span="24" :xl="10" class="mb-24">
-        <CardInfo2></CardInfo2>
-      </a-col>
-    </a-row> -->
   </div>
 </template>
 
 <script>
-// Bar chart for "Active Users" card.
-import CardBarChart from "../components/Cards/CardBarChart";
-
-// Line chart for "Sales Overview" card.
-import CardLineChart from "../components/Cards/CardLineChart";
-
-// Counter Widgets
-import WidgetCounter from "../components/Widgets/WidgetCounter";
-
-// "Projects" table component.
-import CardProjectTable from "../components/Cards/CardProjectTable";
-
-// Order History card component.
-import CardOrderHistory from "../components/Cards/CardOrderHistory";
-
-// Information card 1.
-import CardInfo from "../components/Cards/CardInfo";
-
-// Information card 2.
-import CardInfo2 from "../components/Cards/CardInfo2";
 import http from "@/api/http";
 export default {
-  components: {
-    CardBarChart,
-    CardLineChart,
-    WidgetCounter,
-    CardProjectTable,
-    CardOrderHistory,
-    CardInfo,
-    CardInfo2,
-  },
+  components: {},
   data() {
     return {
       articleItems: [],
