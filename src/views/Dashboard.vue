@@ -46,39 +46,48 @@
           </div>
         </a-col>
         <a-row :gutter="24" type="flex">
-          <a-col
-            :span="6"
-            style="
-              text-align: center;
-              margin-left: auto;
-              margin-right: auto;
-              margin-top: 150px;
-
-              justify-content: center;
-            "
-          >
-            <div
-              style="width=100%; height:200px; background-color: rgba(0, 0, 0, 0.5); color:white"
-            >
-              공지사항
+          <a-col :span="6"></a-col>
+          <a-col :span="6">
+            <div>
+              <a-row>
+                <a-card
+                  title="공지사항"
+                  :bordered="true"
+                  style="margin-top: 30%; margin-left: auto; margin-right: auto"
+                  :size="small"
+                >
+                  <template #extra><a href="#/tables">more</a></template>
+                  <a-table
+                    :dataSource="articleItems"
+                    :columns="columns"
+                    :pagination="false"
+                    :size="small"
+                  />
+                </a-card>
+              </a-row>
             </div>
           </a-col>
-          <a-col
-            :span="6"
-            style="
-              text-align: center;
-              justify-content: center;
-              margin-left: auto;
-              margin-right: auto;
-              margin-top: 150px;
-            "
-          >
-            <div
-              style="width=100%; height:200px; background-color:rgba(0, 0, 0, 0.5);  color:white"
-            >
-              뉴스
+          <a-col :span="6">
+            <div>
+              <a-row>
+                <a-card
+                  title="NEWS"
+                  :bordered="true"
+                  style="margin-top: 30%; margin-left: auto; margin-right: auto"
+                  :size="small"
+                >
+                  <template #extra><a href="#/tables">more</a></template>
+                  <a-table
+                    :dataSource="articleItems"
+                    :columns="columns"
+                    :pagination="false"
+                    :size="small"
+                  />
+                </a-card>
+              </a-row>
             </div>
           </a-col>
+          <a-col :span="6"></a-col>
         </a-row>
       </a-row>
     </a-row>
@@ -162,7 +171,7 @@ import CardInfo from "../components/Cards/CardInfo";
 
 // Information card 2.
 import CardInfo2 from "../components/Cards/CardInfo2";
-
+import http from "@/api/http";
 export default {
   components: {
     CardBarChart,
@@ -174,7 +183,31 @@ export default {
     CardInfo2,
   },
   data() {
-    return {};
+    return {
+      articleItems: [],
+
+      columns: [
+        {
+          title: "no",
+          dataIndex: "articleno",
+          key: "articleno",
+        },
+        {
+          title: "subject",
+          dataIndex: "subject",
+          key: "subject",
+        },
+      ],
+    };
+  },
+  created() {
+    http.get("/board").then(({ data }) => {
+      this.articleItems = data.sort((a, b) => {
+        return b.articleno - a.articleno;
+      });
+      this.articleItems = this.articleItems.splice(0, 3);
+      console.log(this.articleItems);
+    });
   },
 };
 </script>
