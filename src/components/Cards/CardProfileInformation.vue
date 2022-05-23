@@ -1,5 +1,4 @@
 <template>
-  <!-- Profile Information Card -->
   <a-card
     :bordered="false"
     class="header-solid h-full card-profile-information"
@@ -86,7 +85,6 @@
       </a-descriptions-item>
     </a-descriptions>
   </a-card>
-  <!-- / Profile Information Card -->
 </template>
 
 <script>
@@ -112,11 +110,6 @@ export default {
     ...mapState(memberStore, ["userInfo"]),
     ...mapMutations(memberStore, ["changeUser"]),
   },
-  // watch: {
-  //   user: function (newData, oldData) {
-  //     console.log("새로운 " + newData);
-  //   },
-  // },
   created() {
     this.user.username = this.userInfo.username;
     this.user.userpass = this.userInfo.userpass;

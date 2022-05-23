@@ -101,9 +101,7 @@ export default {
             let aptname = this.aptname;
             http.get("/interest/list/" + aptname).then(({ data }) => {
               console.log(data);
-              // data.forEach((element) => {
-              //   this.aptdetail.push({ aptname: element });
-              // });
+
               this.aptdetail = data;
 
               this.dongCode = data[0].dongCode;
