@@ -5,6 +5,50 @@
 
 <template>
   <div>
+    <!--setting main dashboard-->
+
+    <a-row
+      :gutter="24"
+      type="flex"
+      style="
+        height: 80vh;
+        background: url(https://photo.coolenjoy.net/data/editor/2108/2117eaf4086e95f302f5fdcc3dd04c979011f6e2.jpg)
+          no-repeat center;
+        background-size: cover;
+        text-align: center;
+        justify-content: flex-end;
+      "
+    >
+      <div class="bg">
+        <a-col :span="24">
+          <div
+            style="
+              color: antiquewhite;
+              position: relative;
+              margin-top: 15%;
+              font-size: xx-large;
+            "
+          >
+            HAPPY HOUSE
+          </div>
+        </a-col>
+      </div>
+    </a-row>
+    <!--/setting main dashboard-->
+    <a-row :gutter="24" type="flex">
+      <a-col
+        :span="12"
+        style="text-align: center; justify-content: flex-end"
+      >
+      <div style="width=100%; height:300px; background-color:coral">공지사항</div>
+      </a-col>
+      <a-col
+        :span="12"
+        style="text-align: center; justify-content: flex-end"
+      >
+      <div style="width=100%; height:300px; background-color:coral">뉴스 자리</div>
+      </a-col>
+    </a-row>
     <!-- Counter Widgets -->
     <a-row :gutter="24">
       <a-col
@@ -291,4 +335,33 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.bg {
+  background-color: rgba(0, 0, 0, 0.5); /*살짝 투명한 검정으로 배경색*/
+  width: 100%;
+  height: 80vh;
+  position: absolute; /*다른 요소들 위로 겹쳐질 수 있게함*/
+  top: 95px;
+}
+section {
+  background-size: cover;
+  display: block;
+  width: 100%;
+  height: 400px;
+  color: #ffffff;
+  text-align: center;
+  padding-top: 150px;
+}
+section h1 {
+  font-size: 2.5em;
+}
+section p {
+  margin-bottom: 30px;
+}
+section h1,
+p,
+a {
+  position: relative;
+  z-index: 1000; /*맨 앞으로 나오도록 함*/
+}
+</style>
