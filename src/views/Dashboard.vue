@@ -4,28 +4,27 @@
  -->
 
 <template>
-  <div>
+  <div
+    style="
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background: url(https://photo.coolenjoy.net/data/editor/2108/2117eaf4086e95f302f5fdcc3dd04c979011f6e2.jpg)
+        no-repeat center;
+      background-size: 100%;
+    "
+  >
     <!--setting main dashboard-->
 
-    <a-row
-      :gutter="24"
-      type="flex"
-      style="
-        height: 100vh;
-        background: url(https://photo.coolenjoy.net/data/editor/2108/2117eaf4086e95f302f5fdcc3dd04c979011f6e2.jpg)
-          no-repeat center;
-        background-size: cover;
-        text-align: center;
-        justify-content: center;
-      "
-    >
-      <div class="bg">
+    <a-row style="text-align: center; justify-content: center">
+      <a-row class="bg">
         <a-col :span="24">
           <div
             style="
               color: antiquewhite;
               position: relative;
-              margin-top: 15%;
+              margin-top: 10%;
               font-size: xx-large;
             "
           >
@@ -36,7 +35,7 @@
             style="
               width: 200px;
               position: relative;
-              margin-top: 20%;
+              margin-top: 15%;
               margin-left: auto;
               margin-right: auto;
             "
@@ -46,23 +45,45 @@
             </router-link>
           </div>
         </a-col>
-      </div>
+        <a-row :gutter="24" type="flex">
+          <a-col
+            :span="6"
+            style="
+              text-align: center;
+              margin-left: auto;
+              margin-right: auto;
+              margin-top: 150px;
+
+              justify-content: center;
+            "
+          >
+            <div
+              style="width=100%; height:200px; background-color: rgba(0, 0, 0, 0.5); color:white"
+            >
+              공지사항
+            </div>
+          </a-col>
+          <a-col
+            :span="6"
+            style="
+              text-align: center;
+              justify-content: center;
+              margin-left: auto;
+              margin-right: auto;
+              margin-top: 150px;
+            "
+          >
+            <div
+              style="width=100%; height:200px; background-color:rgba(0, 0, 0, 0.5);  color:white"
+            >
+              뉴스
+            </div>
+          </a-col>
+        </a-row>
+      </a-row>
     </a-row>
-    <!--/setting main dashboard-->
-    <a-row :gutter="24" type="flex">
-      <a-col :span="12" style="text-align: center; justify-content: flex-end">
-        <div style="width=100%; height:300px; background-color:coral">
-          공지사항
-        </div>
-      </a-col>
-      <a-col :span="12" style="text-align: center; justify-content: flex-end">
-        <div style="width=100%; height:300px; background-color:coral">
-          뉴스 자리
-        </div>
-      </a-col>
-    </a-row>
-    <!-- Counter Widgets -->
-    <a-row :gutter="24">
+
+    <!-- <a-row :gutter="24">
       <a-col
         :span="24"
         :lg="12"
@@ -71,7 +92,6 @@
         v-for="(stat, index) in stats"
         :key="index"
       >
-        <!-- Widget 1 Card -->
         <WidgetCounter
           :title="stat.title"
           :value="stat.value"
@@ -80,63 +100,44 @@
           :icon="stat.icon"
           :status="stat.status"
         ></WidgetCounter>
-        <!-- / Widget 1 Card -->
       </a-col>
-    </a-row>
-    <!-- / Counter Widgets -->
+    </a-row> -->
 
     <!-- Charts -->
-    <a-row :gutter="24" type="flex" align="stretch">
+    <!-- <a-row :gutter="24" type="flex" align="stretch">
       <a-col :span="24" :lg="10" class="mb-24">
-        <!-- Active Users Card -->
         <CardBarChart></CardBarChart>
-        <!-- Active Users Card -->
       </a-col>
       <a-col :span="24" :lg="14" class="mb-24">
-        <!-- Sales Overview Card -->
         <CardLineChart></CardLineChart>
-        <!-- / Sales Overview Card -->
       </a-col>
-    </a-row>
+    </a-row> -->
     <!-- / Charts -->
 
     <!-- Table & Timeline -->
-    <a-row :gutter="24" type="flex" align="stretch">
-      <!-- Table -->
+    <!-- <a-row :gutter="24" type="flex" align="stretch">
       <a-col :span="24" :lg="16" class="mb-24">
-        <!-- Projects Table Card -->
         <CardProjectTable
           :data="tableData"
           :columns="tableColumns"
         ></CardProjectTable>
-        <!-- / Projects Table Card -->
       </a-col>
-      <!-- / Table -->
 
-      <!-- Timeline -->
       <a-col :span="24" :lg="8" class="mb-24">
-        <!-- Orders History Timeline Card -->
         <CardOrderHistory></CardOrderHistory>
-        <!-- / Orders History Timeline Card -->
       </a-col>
-      <!-- / Timeline -->
-    </a-row>
+    </a-row> -->
     <!-- / Table & Timeline -->
 
     <!-- Cards -->
-    <a-row :gutter="24" type="flex" align="stretch">
+    <!-- <a-row :gutter="24" type="flex" align="stretch">
       <a-col :span="24" :xl="14" class="mb-24">
-        <!-- Information Card 1 -->
         <CardInfo></CardInfo>
-        <!-- / Information Card 1 -->
       </a-col>
       <a-col :span="24" :xl="10" class="mb-24">
-        <!-- Information Card 2 -->
         <CardInfo2></CardInfo2>
-        <!-- / Information Card 2 -->
       </a-col>
-    </a-row>
-    <!-- / Cards -->
+    </a-row> -->
   </div>
 </template>
 
@@ -350,10 +351,10 @@ export default {
 <style lang="scss" scoped>
 .bg {
   background-color: rgba(0, 0, 0, 0.5); /*살짝 투명한 검정으로 배경색*/
-  width: 100%;
+  width: 102%;
   height: 100vh;
   position: absolute; /*다른 요소들 위로 겹쳐질 수 있게함*/
-  top: 95px;
+  top: 0;
 }
 section {
   background-size: cover;
