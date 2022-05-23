@@ -32,13 +32,19 @@ let routes = [
   },
   {
     path: "/tables",
-    name: "Tables",
+    name: "FAQ",
     layout: "dashboard",
     component: () => import("../views/Tables.vue"),
   },
   {
+    path: "/table/regist",
+    name: "FAQ 작성",
+    layout: "dashboard",
+    component: () => import("../views/RegistArticle.vue"),
+  },
+  {
     path: "/billing",
-    name: "Billing",
+    name: "MAP",
     layout: "dashboard",
     component: () => import("../views/Billing.vue"),
   },

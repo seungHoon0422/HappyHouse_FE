@@ -72,7 +72,7 @@
               />
             </svg>
           </span>
-          <span class="label">QnA 게시판</span>
+          <span class="label">FAQ</span>
         </router-link>
       </a-menu-item>
       <a-menu-item>
@@ -97,7 +97,7 @@
               />
             </svg>
           </span>
-          <span class="label">kakao map</span>
+          <span class="label">MAP</span>
         </router-link>
       </a-menu-item>
       <!-- <a-menu-item>
@@ -185,7 +185,7 @@
           <span class="label">Sign In</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item>
+      <a-menu-item v-if="userInfo === null">
         <router-link to="/sign-up">
           <span class="icon">
             <svg
@@ -241,7 +241,7 @@
     <!-- / Sidebar Navigation Menu -->
 
     <!-- Sidebar Footer -->
-    <div class="aside-footer">
+<!--    <div class="aside-footer">
       <div class="footer-box">
         <span class="icon">
           <svg
@@ -276,18 +276,18 @@
           DOCUMENTATION
         </a-button>
       </div>
-    </div>
+    </div> -->
     <!-- / Sidebar Footer -->
 
-    <a-button
+<!--    <a-button
       type="primary"
       href="https://www.creative-tim.com/product/muse-vue-ant-design-dashboard-pro"
       block
       target="_blank"
     >
       UPGRADE TO PRO
-    </a-button>
-  </a-layout-sider>
+    </a-button> -->
+  </a-layout-sider> 
   <!-- / Main Sidebar -->
 </template>
 

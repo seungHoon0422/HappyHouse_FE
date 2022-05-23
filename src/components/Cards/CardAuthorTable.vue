@@ -17,6 +17,23 @@
           </a-radio-group>
         </a-col>
       </a-row>
+      <router-link to="/table/regist">
+        <a-row v-if="userInfo && userInfo.level >= 2" :gutter="24" type="flex">
+          <a-col
+            :span="24"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+              margin-top: 20px;
+            "
+          >
+            <a-button type="primary" ghost to="/table/regist"
+              >게시글 작성</a-button
+            >
+          </a-col>
+        </a-row>
+      </router-link>
     </template>
 
     <a-table
@@ -65,16 +82,14 @@
           </div>
         </div>
       </template>
-      <template slot="editBtn" slot-scope="row">
-        <a-button type="link" :data-id="row.key" class="btn-edit">
-          Edit
-        </a-button>
-      </template>
     </a-table>
   </a-card>
   <!-- / Authors Table Card -->
 </template>
 <script>
+import { mapState } from "vuex";
+
+const memberStore = "memberStore";
 var article = {};
 export default {
   props: {
@@ -96,7 +111,9 @@ export default {
       tableData: [],
     };
   },
-
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
   watch: {
     data: function (newData, oldData) {
       this.tableData = newData;

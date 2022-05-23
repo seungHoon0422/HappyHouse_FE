@@ -43,7 +43,7 @@
               }}</a-descriptions-item>
             </a-descriptions>
           </template>
-          <a-row :gutter="24">
+          <a-row :gutter="24" v-if="userInfo && userInfo.level >= 2">
             <a-col :span="18"></a-col>
             <a-col :span="2" style="margin: 10px">
               <a-button type="primary" block ghost> 수정 </a-button>
@@ -79,6 +79,9 @@
 import CardAuthorTable from "../components/Cards/CardAuthorTable";
 import CardArticleDetail from "../components/Cards/CardArticleDetail";
 import http from "@/api/http";
+import { mapState } from "vuex";
+const memberStore = "memberStore";
+
 // "Authors" table list of columns and their properties.
 const table1Columns = [
   {
@@ -106,16 +109,6 @@ const table1Columns = [
     dataIndex: "regtime",
     scopedSlots: { customRender: "regtime" },
   },
-  // {
-  //   title: "EMPLOYED",
-  //   dataIndex: "employed",
-  //   class: "text-muted",
-  // },
-  {
-    title: "",
-    scopedSlots: { customRender: "editBtn" },
-    width: 50,
-  },
 ];
 
 export default {
@@ -136,6 +129,10 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(memberStore, ["userInfo"], ["isLogin"]),
+  },
+
   created() {
     this.updateArticles();
   },
