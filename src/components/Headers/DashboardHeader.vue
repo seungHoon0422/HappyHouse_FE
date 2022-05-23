@@ -148,12 +148,6 @@ export default {
       type: Boolean,
       default: false,
     },
-
-    // Header notifications data.
-    notificationsData: {
-      type: Array,
-      default: () => notificationsData,
-    },
   },
   data() {
     return {
