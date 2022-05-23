@@ -11,7 +11,7 @@
       :gutter="24"
       type="flex"
       style="
-        height: 80vh;
+        height: 100vh;
         background: url(https://photo.coolenjoy.net/data/editor/2108/2117eaf4086e95f302f5fdcc3dd04c979011f6e2.jpg)
           no-repeat center;
         background-size: cover;
@@ -31,22 +31,34 @@
           >
             HAPPY HOUSE
           </div>
+
+          <div
+            style="
+              width: 200px;
+              position: relative;
+              margin-top: 20%;
+              margin-left: auto;
+              margin-right: auto;
+            "
+          >
+            <router-link to="/billing">
+              <a-button shape="round" block>내집 찾으러 가자~</a-button>
+            </router-link>
+          </div>
         </a-col>
       </div>
     </a-row>
     <!--/setting main dashboard-->
     <a-row :gutter="24" type="flex">
-      <a-col
-        :span="12"
-        style="text-align: center; justify-content: flex-end"
-      >
-      <div style="width=100%; height:300px; background-color:coral">공지사항</div>
+      <a-col :span="12" style="text-align: center; justify-content: flex-end">
+        <div style="width=100%; height:300px; background-color:coral">
+          공지사항
+        </div>
       </a-col>
-      <a-col
-        :span="12"
-        style="text-align: center; justify-content: flex-end"
-      >
-      <div style="width=100%; height:300px; background-color:coral">뉴스 자리</div>
+      <a-col :span="12" style="text-align: center; justify-content: flex-end">
+        <div style="width=100%; height:300px; background-color:coral">
+          뉴스 자리
+        </div>
       </a-col>
     </a-row>
     <!-- Counter Widgets -->
@@ -339,7 +351,7 @@ export default {
 .bg {
   background-color: rgba(0, 0, 0, 0.5); /*살짝 투명한 검정으로 배경색*/
   width: 100%;
-  height: 80vh;
+  height: 100vh;
   position: absolute; /*다른 요소들 위로 겹쳐질 수 있게함*/
   top: 95px;
 }
