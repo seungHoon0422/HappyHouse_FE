@@ -39,12 +39,12 @@
 
     <a-row type="flex" :gutter="24">
       <!-- Profile Information Column -->
-      <a-col :span="24" :md="9" class="mb-24">
+      <a-col :span="24" :md="7" class="mb-24">
         <!--회원정보창-->
         <CardProfileInformation></CardProfileInformation>
       </a-col>
 
-      <a-col :span="24" :md="15" class="mb-24">
+      <a-col :span="24" :md="17" class="mb-24">
         <!--관심목록-->
         <CardProfileInterest
           :data="tableData"
@@ -63,7 +63,7 @@ import { mapState } from "vuex";
 const memberStore = "memberStore";
 const columns = [
   {
-    title: "아파트 명",
+    title: "",
     dataIndex: "aptname",
     scopedSlots: { customRender: "aptname" },
   },
