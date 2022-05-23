@@ -10,6 +10,7 @@
     <template #title>
       <h6 class="font-semibold m-0 pl-10">나의 관심목록</h6>
     </template>
+
     <a-col :span="24" :md="10" class="mb-24">
       <a-table
         :columns="columns"
@@ -82,7 +83,7 @@ export default {
     return {
       aptdetail: [],
       aptname: "",
-      sidodetail: "",
+      sidodetail: {},
       columnsdetail: columnsdetail,
     };
   },
@@ -90,6 +91,7 @@ export default {
   computed: {
     ...mapState(memberStore, ["userInfo"]),
   },
+
   methods: {
     clickrow: function (record, index) {
       return {
