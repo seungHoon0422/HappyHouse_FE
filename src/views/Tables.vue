@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <!-- Authors Table -->
@@ -82,7 +81,6 @@
 <script>
 // "Authors" table component.
 import CardAuthorTable from "../components/Cards/CardAuthorTable";
-import CardArticleDetail from "../components/Cards/CardArticleDetail";
 import http from "@/api/http";
 import { mapState } from "vuex";
 const memberStore = "memberStore";
@@ -119,7 +117,6 @@ const table1Columns = [
 export default {
   components: {
     CardAuthorTable,
-    CardArticleDetail,
   },
   data() {
     return {
