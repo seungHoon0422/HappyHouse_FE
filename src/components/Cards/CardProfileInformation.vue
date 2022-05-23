@@ -30,6 +30,33 @@
       </svg>
     </a-button>
     <hr class="my-15" />
+
+    <!-- 모달  -->
+    <a-modal :visible="visible" title="회원정보 수정">
+      <template #footer>
+        <a-button key="back" @click="handleCancel">취소</a-button>
+        <a-button key="modify" @click="modify">수정</a-button>
+      </template>
+
+      <a-form>
+        <a-form-item>
+          <a-input addon-before="이름" v-model="user.username" />
+        </a-form-item>
+        <a-form-item>
+          <a-input addon-before="아이디" v-model="user.userid" disabled />
+        </a-form-item>
+        <a-form-item>
+          <a-input addon-before="비밀번호" v-model="user.userpass" />
+        </a-form-item>
+        <a-form-item>
+          <a-input addon-before="이메일" v-model="user.email" />
+        </a-form-item>
+        <a-form-item>
+          <a-input addon-before="전화번호" v-model="user.phone" />
+        </a-form-item>
+      </a-form>
+    </a-modal>
+
     <a-descriptions :column="1" class="text-center">
       <a-descriptions-item label="이름">
         {{ userInfo.username }}
@@ -63,17 +90,34 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import http from "@/api/http";
+import { mapState, mapMutations } from "vuex";
 
 const memberStore = "memberStore";
 export default {
   data() {
     return {
       visible: false,
+      user: {
+        userid: "",
+        username: "",
+        userpass: "",
+        email: "",
+        phone: "",
+      },
     };
   },
+
   computed: {
     ...mapState(memberStore, ["userInfo"]),
+    ...mapMutations(memberStore, ["SET_USER_INFO"]),
+  },
+  created() {
+    this.user.username = this.userInfo.username;
+    this.user.userpass = this.userInfo.userpass;
+    this.user.userid = this.userInfo.userid;
+    this.user.email = this.userInfo.email;
+    this.user.phone = this.userInfo.phone;
   },
   methods: {
     showModal() {
@@ -81,6 +125,25 @@ export default {
     },
     handleCancel() {
       this.visible = false;
+    },
+    modify() {
+      console.log(this.user);
+      http
+        .post("restuser/update", null, {
+          params: {
+            userid: this.user.userid,
+            userpass: this.user.userpass,
+            username: this.user.username,
+            email: this.user.email,
+            phone: this.user.phone,
+          },
+        })
+        .then(({ data }) => {
+          console.log(data);
+          console.log(this.user);
+
+          this.SET_USER_INFO;
+        });
     },
   },
 };
