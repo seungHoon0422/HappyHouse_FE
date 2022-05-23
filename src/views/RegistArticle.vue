@@ -110,7 +110,7 @@ export default {
       const params = {
         userid: this.userInfo.userid,
         subject: this.subject,
-        content: this.content,
+        content: this.content.replaceAll("\n", "<br>"),
       };
       http.post("/board", params).then(({ data }) => {
         console.log(data);

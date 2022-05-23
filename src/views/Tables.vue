@@ -23,24 +23,24 @@
 
           <template>
             <a-descriptions title="" bordered style="margin: 20px">
-              <a-descriptions-item label="글번호">{{
-                article.articleno
-              }}</a-descriptions-item>
-              <a-descriptions-item label="작성자 이름">{{
-                article.userid
-              }}</a-descriptions-item>
-              <a-descriptions-item label="작성날짜">{{
-                article.regtime
-              }}</a-descriptions-item>
-              <a-descriptions-item label="제목" :span="2">{{
-                article.subject
-              }}</a-descriptions-item>
-              <a-descriptions-item label="조회수">{{
-                article.hit
-              }}</a-descriptions-item>
-              <a-descriptions-item label="내용" :span="3">{{
-                article.content
-              }}</a-descriptions-item>
+              <a-descriptions-item label="글번호">
+                {{ article.articleno }}
+              </a-descriptions-item>
+              <a-descriptions-item label="작성자 이름">
+                {{ article.userid }}
+              </a-descriptions-item>
+              <a-descriptions-item label="작성날짜">
+                {{ article.regtime }}
+              </a-descriptions-item>
+              <a-descriptions-item label="제목" :span="2">
+                {{ article.subject }}
+              </a-descriptions-item>
+              <a-descriptions-item label="조회수">
+                {{ article.hit }}
+              </a-descriptions-item>
+              <a-descriptions-item label="내용" :span="3">
+                <span v-html="article.content"></span>
+              </a-descriptions-item>
             </a-descriptions>
           </template>
           <a-row :gutter="24" v-if="userInfo && userInfo.level >= 2">

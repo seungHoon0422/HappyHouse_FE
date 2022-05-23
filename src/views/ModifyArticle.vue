@@ -21,11 +21,7 @@
       <a-row :gutter="24" type="flex">
         <a-col :span="24">
           <template>
-            <a-form
-              :form="form"
-              :label-col="{ span: 2 }"
-              :wrapper-col="{ span: 20 }"
-            >
+            <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }">
               <a-form-item label="제목">
                 <a-input
                   v-model="article.subject"
@@ -104,6 +100,7 @@ export default {
 
   created() {
     http.get(`/board/${this.$route.params.articleno}`).then(({ data }) => {
+      data.content = data.content.replaceAll("<br>", "\n");
       this.article = data;
     });
   },
@@ -120,12 +117,13 @@ export default {
       }
     },
     handleSubmit() {
+      this.article.content = this.article.content.replaceAll("\n", "<br>");
       http
         .put("/board/" + this.article.articleno, this.article)
         .then(({ data }) => {
           console.log(data);
-          alert("게시글이 수정되었습니다.");
           this.$router.push("/Tables");
+          alert("게시글이 수정되었습니다.");
         });
     },
   },
