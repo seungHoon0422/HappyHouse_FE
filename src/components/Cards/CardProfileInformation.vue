@@ -110,8 +110,13 @@ export default {
 
   computed: {
     ...mapState(memberStore, ["userInfo"]),
-    ...mapMutations(memberStore, ["SET_USER_INFO"]),
+    ...mapMutations(memberStore, ["changeUser"]),
   },
+  // watch: {
+  //   user: function (newData, oldData) {
+  //     console.log("새로운 " + newData);
+  //   },
+  // },
   created() {
     this.user.username = this.userInfo.username;
     this.user.userpass = this.userInfo.userpass;
@@ -127,23 +132,26 @@ export default {
       this.visible = false;
     },
     modify() {
-      console.log(this.user);
+      // console.log(this.user);
       http
         .post("restuser/update", null, {
           params: {
-            userid: this.user.userid,
-            userpass: this.user.userpass,
-            username: this.user.username,
-            email: this.user.email,
-            phone: this.user.phone,
+            userid: this.userInfo.userid,
+            userpass: this.userInfo.userpass,
+            username: this.userInfo.username,
+            email: this.userInfo.email,
+            phone: this.userInfo.phone,
           },
         })
         .then(({ data }) => {
           console.log(data);
           console.log(this.user);
 
-          this.SET_USER_INFO;
+          this.changeUser(memberStore, this.user);
+
+          // this.memberStore.commit("SET_USER_INFO", this.user);
         });
+      this.handleCancel();
     },
   },
 };

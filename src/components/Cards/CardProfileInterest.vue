@@ -105,11 +105,11 @@ export default {
               //   this.aptdetail.push({ aptname: element });
               // });
               this.aptdetail = data;
-              this.dongname = data[0].dongName;
-              let dongname = this.dongname;
-              console.log(dongname);
-              http.get("/interest/sidoName/" + dongname).then(({ data }) => {
-                console.log(data);
+
+              this.dongCode = data[0].dongCode;
+              let dongCode = this.dongCode;
+              console.log("동코드", dongCode);
+              http.get("/interest/sidoName/" + dongCode).then(({ data }) => {
                 this.sidodetail = data;
               });
             });

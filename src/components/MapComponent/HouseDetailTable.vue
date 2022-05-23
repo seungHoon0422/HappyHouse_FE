@@ -33,13 +33,19 @@
         <a-button type="primary" style="margin: 10px" @click="clickStarbucks"
           >스타벅스 매장 보러가기</a-button
         >
-        <a-button type="primary" style="margin: 10px">관심등록</a-button>
+        <a-button type="primary" style="margin: 10px" @click="interestplus"
+          >관심등록</a-button
+        >
       </a-col>
     </a-row>
   </div>
 </template>
 
 <script>
+import http from "@/api/http";
+import { mapState } from "vuex";
+const memberStore = "memberStore";
+
 export default {
   name: "MuseVueAntDesignDashboardMainHouseDetailTable",
 
@@ -86,11 +92,41 @@ export default {
     },
   },
   mounted() {},
-
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
   methods: {
     clickStarbucks() {
       console.log("clickStarbucks");
       this.$emit("showStarbucks", this.detailInfo);
+    },
+    interestplus() {
+      if (!this.userInfo) {
+        if (
+          confirm(
+            "로그인 후 관심등록이 가능합니다. 로그인페이지로 이동하시겠습니까 ?"
+          )
+        ) {
+          this.$router.push({ name: "Sign-In" });
+          return;
+        }
+      } else {
+        console.log(this.detailInfo.aptCode + " " + this.userInfo.userid);
+        http
+          .post("/interest/regist", null, {
+            params: {
+              userid: this.userInfo.userid,
+              aptCode: this.detailInfo.aptCode,
+            },
+          })
+          .then(({ data }) => {
+            console.log(data);
+            alert("관심목록에 추가되었습니다.");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
   },
 };

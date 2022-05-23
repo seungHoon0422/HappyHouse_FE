@@ -21,7 +21,16 @@
             " " +
             sidodetail.dongName
           }}</h10>
-          <a-button @click="deleteInterest">Delete</a-button>
+          <a-col
+            :span="24"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: flex-end;
+            "
+          >
+            <a-button size="small" @click="deleteInterest">Delete</a-button>
+          </a-col>
         </div>
         <p>
           <router-link class="pl-10" to="/billing"

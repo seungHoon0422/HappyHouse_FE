@@ -17,6 +17,10 @@ const memberStore = {
     SET_USER_INFO: (state, userInfo) => {
       state.userInfo = userInfo;
       state.isLogin = true;
+      console.log("state ", userInfo);
+    },
+    changeUser: (state, userInfo) => {
+      state.userInfo = userInfo.user;
     },
   },
   actions: {
