@@ -67,11 +67,6 @@ const columns = [
     dataIndex: "aptname",
     scopedSlots: { customRender: "aptname" },
   },
-  {
-    title: "삭제",
-    dataIndex: "delete",
-    scopedSlots: { customRender: "delete" },
-  },
 ];
 export default {
   components: {
@@ -86,6 +81,11 @@ export default {
       tableData: [],
       columns: columns,
     };
+  },
+  watch: {
+    data: function (newData, oldData) {
+      this.tableData = newData;
+    },
   },
   created() {
     if (this.userInfo === null) this.$router.push({ name: "Sign-In" });

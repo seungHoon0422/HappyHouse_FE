@@ -30,22 +30,6 @@
       </svg>
     </a-button>
     <hr class="my-15" />
-    <!-- 모달 -->
-    <!-- <a-modal :visible="visible" title="Title">
-      <template #footer>
-        <a-button key="back" @click="handleCancel">취소</a-button>
-        <a-button key="modify">수정</a-button>
-      </template>
-
-      <a-input v-model:value="username" addon-before="이름">{{
-        userInfo.username
-      }}</a-input>
-      <a-input v-model="username" addon-before="아이디" />
-      <a-input v-model="username" addon-before="비밀번호" />
-      <a-input v-model="username" addon-before="이메일" />
-      <a-input v-model="username" addon-before="전화번호" />
-    </a-modal> -->
-
     <a-descriptions :column="1" class="text-center">
       <a-descriptions-item label="이름">
         {{ userInfo.username }}
@@ -80,6 +64,7 @@
 
 <script>
 import { mapState } from "vuex";
+
 const memberStore = "memberStore";
 export default {
   data() {

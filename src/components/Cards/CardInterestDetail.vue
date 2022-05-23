@@ -7,15 +7,28 @@
     :customRow="clickrow"
   >
     <template #title>
-      <h6 class="font-semibold bg-gray-3 m-0 pl-10">{{ aptname }}</h6>
+      <h6 class="font-semibold bg-gray-3 m-0 pl-10">
+        {{ aptname }}
+      </h6>
+
       <br />
-      <h10 class="font-regular text-gray-9 m-0 pl-10">{{
-        sidodetail.sidoName +
-        " " +
-        sidodetail.gugunName +
-        " " +
-        sidodetail.dongName
-      }}</h10>
+      <div v-if="aptname">
+        <div>
+          <h10 class="font-regular text-gray-9 m-0 pl-10">{{
+            sidodetail.sidoName +
+            " " +
+            sidodetail.gugunName +
+            " " +
+            sidodetail.dongName
+          }}</h10>
+          <a-button @click="deleteInterest">Delete</a-button>
+        </div>
+        <p>
+          <router-link class="pl-10" to="/billing"
+            >-> 지도에서 찾아보기</router-link
+          >
+        </p>
+      </div>
     </template>
     <br />
     <a-table :columns="columns" :data-source="data" :pagination="false">
@@ -24,6 +37,9 @@
 </template>
 
 <script>
+import http from "@/api/http";
+import { mapState } from "vuex";
+const memberStore = "memberStore";
 export default {
   props: {
     data: {
@@ -35,8 +51,8 @@ export default {
       default: () => [],
     },
     sidodetail: {
-      type: Array,
-      default: "",
+      type: Object,
+      default: () => [],
     },
     columns: {
       type: Array,
@@ -56,6 +72,9 @@ export default {
       this.sidodetail = newData;
     },
   },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
   methods: {
     clickrow: function (record, index) {
       return {
@@ -65,6 +84,19 @@ export default {
           },
         },
       };
+    },
+    deleteInterest() {
+      if (confirm(this.aptname + "을 관심목록에서 삭제하시겠습니까 ? ")) {
+        let userid = this.userInfo.userid;
+        console.log(userid + " " + this.aptname);
+        http
+          .delete("/interest/" + this.aptname + "/" + userid)
+          .then(({ data }) => {
+            console.log(data);
+
+            window.location.reload();
+          });
+      }
     },
   },
 };
