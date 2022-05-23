@@ -17,7 +17,10 @@
     :style="{ backgroundColor: 'transparent' }"
   >
     <div class="brand">
-      <img src="images/logo-ct-black.png" alt="" /> <span>Happy House</span>
+      <router-link to="/"
+        ><img src="images/logo-ct-black.png" alt="" />
+        <span>Happy House</span></router-link
+      >
     </div>
     <hr />
 
@@ -122,27 +125,6 @@
         </router-link>
       </a-menu-item> -->
       <a-menu-item class="menu-item-header"> Account Pages </a-menu-item>
-      <a-menu-item>
-        <router-link to="/profile">
-          <span class="icon">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM12 7C12 8.10457 11.1046 9 10 9C8.89543 9 8 8.10457 8 7C8 5.89543 8.89543 5 10 5C11.1046 5 12 5.89543 12 7ZM9.99993 11C7.98239 11 6.24394 12.195 5.45374 13.9157C6.55403 15.192 8.18265 16 9.99998 16C11.8173 16 13.4459 15.1921 14.5462 13.9158C13.756 12.195 12.0175 11 9.99993 11Z"
-                fill="#111827"
-              />
-            </svg>
-          </span>
-          <span class="label">Profile</span>
-        </router-link>
-      </a-menu-item>
       <!-- <a-menu-item v-if="userInfo">
         <router-link to="/sign-in">
           <span class="icon">
@@ -183,6 +165,27 @@
             </svg>
           </span>
           <span class="label">Sign In</span>
+        </router-link>
+      </a-menu-item>
+      <a-menu-item v-else>
+        <router-link to="/profile">
+          <span class="icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM12 7C12 8.10457 11.1046 9 10 9C8.89543 9 8 8.10457 8 7C8 5.89543 8.89543 5 10 5C11.1046 5 12 5.89543 12 7ZM9.99993 11C7.98239 11 6.24394 12.195 5.45374 13.9157C6.55403 15.192 8.18265 16 9.99998 16C11.8173 16 13.4459 15.1921 14.5462 13.9158C13.756 12.195 12.0175 11 9.99993 11Z"
+                fill="#111827"
+              />
+            </svg>
+          </span>
+          <span class="label">Profile</span>
         </router-link>
       </a-menu-item>
       <a-menu-item v-if="userInfo === null">
@@ -236,6 +239,28 @@
           </span>
           <span class="label">Sign Up</span>
         </router-link>
+      </a-menu-item>
+
+      <a-menu-item v-else>
+        <a-button class="outline : 0" @click="logout">
+          <span class="icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M6 2C5.44772 2 5 2.44772 5 3V4H4C2.89543 4 2 4.89543 2 6V16C2 17.1046 2.89543 18 4 18H16C17.1046 18 18 17.1046 18 16V6C18 4.89543 17.1046 4 16 4H15V3C15 2.44772 14.5523 2 14 2C13.4477 2 13 2.44772 13 3V4H7V3C7 2.44772 6.55228 2 6 2ZM6 7C5.44772 7 5 7.44772 5 8C5 8.55228 5.44772 9 6 9H14C14.5523 9 15 8.55228 15 8C15 7.44772 14.5523 7 14 7H6Z"
+                fill="#111827"
+              />
+            </svg>
+          </span>
+          <span class="label">LogOut</span>
+        </a-button>
       </a-menu-item>
     </a-menu>
     <!-- / Sidebar Navigation Menu -->
@@ -292,7 +317,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 const memberStore = "memberStore";
 export default {
   props: {
@@ -318,6 +343,17 @@ export default {
     return {
       // sidebarCollapsedModel: this.sidebarCollapsed,
     };
+  },
+  methods: {
+    ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
+    logout() {
+      console.log("로그아웃좀 ");
+      this.SET_IS_LOGIN(false);
+      this.SET_USER_INFO(null);
+      sessionStorage.removeItem("access-token");
+      if (this.$route.path != "/") this.$router.push({ name: "Home" });
+      console.log("bye");
+    },
   },
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
