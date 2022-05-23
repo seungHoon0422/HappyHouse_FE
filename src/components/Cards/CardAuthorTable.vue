@@ -17,23 +17,23 @@
           </a-radio-group>
         </a-col>
       </a-row>
-      <router-link to="/table/regist">
-        <a-row v-if="userInfo && userInfo.level >= 2" :gutter="24" type="flex">
-          <a-col
-            :span="24"
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: flex-end;
-              margin-top: 20px;
-            "
-          >
+      <a-row v-if="userInfo && userInfo.level >= 2" :gutter="24" type="flex">
+        <a-col
+          :span="24"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 20px;
+          "
+        >
+          <router-link to="/table/regist">
             <a-button type="primary" ghost to="/table/regist"
               >게시글 작성</a-button
             >
-          </a-col>
-        </a-row>
-      </router-link>
+          </router-link>
+        </a-col>
+      </a-row>
     </template>
 
     <a-table

@@ -38,7 +38,7 @@ let routes = [
   },
   {
     path: "/table/regist",
-    name: "FAQ 작성",
+    name: "FAQ ",
     layout: "dashboard",
     component: () => import("../views/RegistArticle.vue"),
   },
