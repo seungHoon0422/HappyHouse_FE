@@ -1,8 +1,3 @@
-<!-- 
-	This is the sign in page, it uses the dashboard layout in: 
-	"./layouts/Default.vue" .
- -->
-
 <template>
   <div class="sign-in">
     <a-row type="flex" :gutter="[24, 24]" justify="space-around" align="middle">
@@ -80,13 +75,6 @@
           >
         </p>
       </a-col>
-      <!-- / Sign In Form Column -->
-
-      <!-- Sign In Image Column
-			<a-col :span="24" :md="12" :lg="12" :xl="12" class="col-img">
-				<img src="images/img-signin.jpg" alt="">
-			</a-col> -->
-      <!-- Sign In Image Column -->
     </a-row>
   </div>
 </template>
