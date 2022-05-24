@@ -16,7 +16,7 @@
       <template #title>
         <a-row type="flex" align="middle">
           <a-col :span="24" :md="12" class="col-info">
-            <a-avatar :size="74" shape="square" src="images/face-1.jpg" />
+            <!-- <a-avatar :size="74" shape="square" src="images/face-1.jpg" /> -->
             <div class="avatar-info">
               <h4 class="font-semibold m-0">{{ userInfo.username }}</h4>
               <p>{{ userlevel }}</p>
@@ -82,11 +82,13 @@ export default {
       columns: columns,
     };
   },
-  watch: {
-    data: function (newData, oldData) {
-      this.tableData = newData;
-    },
-  },
+  // watch: {
+  //   tableData: function (newData, oldData) {
+  //     console.log(newData);
+  //     oldData = newData;
+  //     console.log("데이터 바꼈다");
+  //   },
+  // },
   created() {
     if (this.userInfo === null) this.$router.push({ name: "Sign-In" });
     if (this.userInfo.level === 1) this.userlevel = "중개사무소 ";

@@ -14,7 +14,7 @@
     <a-col :span="24" :md="10" class="mb-24">
       <a-table
         :columns="columns"
-        :data-source="data"
+        :data-source="tableData"
         :pagination="true"
         :customRow="clickrow"
       >
@@ -29,6 +29,7 @@
     </a-col>
     <a-col :span="24" :md="14" class="mb-24">
       <card-interest-detail
+        @deleteInterest="deleteInterest"
         :data="aptdetail"
         :aptname="aptname"
         :sidodetail="sidodetail"
@@ -84,8 +85,16 @@ export default {
       aptdetail: [],
       aptname: "",
       sidodetail: {},
+      tableData: [],
+
       columnsdetail: columnsdetail,
     };
+  },
+  watch: {
+    data: function (newData, oldData) {
+      console.log("change");
+      this.tableData = newData;
+    },
   },
   created() {},
   computed: {
@@ -93,6 +102,13 @@ export default {
   },
 
   methods: {
+    deleteInterest(aptname) {
+      this.tableData.forEach((element, index) => {
+        if (element.aptname == aptname) {
+          this.tableData.splice(index, 1);
+        }
+      });
+    },
     clickrow: function (record, index) {
       return {
         on: {

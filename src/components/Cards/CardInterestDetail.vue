@@ -21,6 +21,11 @@
             " " +
             sidodetail.dongName
           }}</h10>
+          <p>
+            <router-link class="pl-10" to="/billing"
+              >-> 지도에서 찾아보기</router-link
+            >
+          </p>
           <a-col
             :span="24"
             style="
@@ -32,11 +37,9 @@
             <a-button size="small" @click="deleteInterest">Delete</a-button>
           </a-col>
         </div>
-        <p>
-          <router-link class="pl-10" to="/billing"
-            >-> 지도에서 찾아보기</router-link
-          >
-        </p>
+      </div>
+      <div v-else>
+        <p>아파트를 선택하여 주세요</p>
       </div>
     </template>
     <br />
@@ -59,9 +62,9 @@ export default {
       type: String,
       default: () => [],
     },
+
     sidodetail: {
       type: Object,
-      default: () => [],
     },
     columns: {
       type: Array,
@@ -70,17 +73,17 @@ export default {
   },
   data() {
     return {
-      detailInterest: [],
+      // detailInterest: [],
     };
   },
-  watch: {
-    data: function (newData, oldData) {
-      this.detailInterest = newData;
-    },
-    data: function (newData, oldData) {
-      this.sidodetail = newData;
-    },
-  },
+  // watch: {
+  //   data: function (newData, oldData) {
+  //     this.data = newData;
+  //   },
+  //   data: function (newData, oldData) {
+  //     this.sidodetail = newData;
+  //   },
+  // },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
   },
@@ -89,7 +92,7 @@ export default {
       return {
         on: {
           click: () => {
-            console.log(this.aptname);
+            console.log("아파트클릭", this.aptname);
           },
         },
       };
@@ -102,8 +105,9 @@ export default {
           .delete("/interest/" + this.aptname + "/" + userid)
           .then(({ data }) => {
             console.log(data);
+            this.$emit("deleteInterest", this.aptname);
 
-            window.location.reload();
+            //     window.location.reload();
           });
       }
     },
