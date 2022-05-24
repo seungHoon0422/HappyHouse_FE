@@ -12,21 +12,27 @@
       </h6>
 
       <br />
+
       <div v-if="aptname">
-        <div>
-          <h10 class="font-regular text-gray-9 m-0 pl-10">{{
-            sidodetail.sidoName +
-            " " +
-            sidodetail.gugunName +
-            " " +
-            sidodetail.dongName
-          }}</h10>
-          <p>
-            <router-link class="pl-10" to="/billing"
-              >-> 지도에서 찾아보기</router-link
-            >
-          </p>
-          <a-col
+        <h10 class="font-regular text-gray-9 m-0 pl-10">{{
+          sidodetail.sidoName +
+          " " +
+          sidodetail.gugunName +
+          " " +
+          sidodetail.dongName
+        }}</h10>
+        <p>
+          <router-link class="pl-10" to="/billing"
+            >-> 지도에서 찾아보기</router-link
+          >
+        </p>
+        <a-col
+          :span="24"
+          style="display: flex; align-items: center; justify-content: flex-end"
+        >
+          <a-button size="small" @click="deleteInterest">Delete</a-button>
+        </a-col>
+        <!-- <a-col
             :span="24"
             style="
               display: flex;
@@ -34,9 +40,15 @@
               justify-content: flex-end;
             "
           >
-            <a-button size="small" @click="deleteInterest">Delete</a-button>
-          </a-col>
-        </div>
+            <a-radio-group v-model="dealAmountBtn" size="small">
+              <a-radio-button value="no" @click="dealAmountUp"
+                >가격높은순</a-radio-button
+              >
+              <a-radio-button value="hit" @click="dealAmountDown"
+                >가격낮은순</a-radio-button
+              >
+            </a-radio-group>
+          </a-col> -->
       </div>
       <div v-else>
         <p>아파트를 선택하여 주세요</p>
@@ -74,20 +86,30 @@ export default {
   data() {
     return {
       // detailInterest: [],
+      dealAmountBtn: "no",
+      data: this.data,
+      sido: this.sidodetail,
     };
   },
-  // watch: {
-  //   data: function (newData, oldData) {
-  //     this.data = newData;
-  //   },
-  //   data: function (newData, oldData) {
-  //     this.sidodetail = newData;
-  //   },
-  // },
+  watch: {
+    data: function (newData, oldData) {
+      this.data = newData;
+    },
+    sido: function (newData, oldData) {
+      this.sido = newData;
+    },
+  },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
   },
   methods: {
+    dealAmountUp() {
+      console.log(this.data);
+      this.data.sort((a, b) => b.dealAmount - a.dealAmount);
+    },
+    dealAmountDown() {
+      this.data.sort((a, b) => a.dealAmount - b.dealAmount);
+    },
     clickrow: function (record, index) {
       return {
         on: {
@@ -104,7 +126,6 @@ export default {
         http
           .delete("/interest/" + this.aptname + "/" + userid)
           .then(({ data }) => {
-            console.log(data);
             this.$emit("deleteInterest", this.aptname);
 
             //     window.location.reload();
