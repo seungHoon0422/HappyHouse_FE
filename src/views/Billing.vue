@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <!--------------------------------- Search Bar  --------------------------------->
@@ -138,13 +137,30 @@ import http from "@/api/http";
 var map;
 var starbucksMarkers = [];
 
+function getDistance(lat1, lng1, lat2, lng2) {
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1); // deg2rad below
+  var dLon = deg2rad(lng2 - lng1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
 export default {
   components: {
     DrawHouseTable,
   },
   data() {
     return {
-
       map: null,
       markers: [],
       markerArr: [],
@@ -354,13 +370,29 @@ export default {
       this.eraseStarbucksMarker();
       http.get("/starbucks/search/" + info.dongCode).then(({ data }) => {
         console.log("starbucks list", data);
+
         var geocoder = new kakao.maps.services.Geocoder();
-        data.forEach((element, index) => {
+
+        let minDistance = 987654321;
+
+        data.forEach((element) => {
           const address = element.address;
           geocoder.addressSearch(address, function (result, status) {
             // 정상적으로 검색이 완료됐으면
             if (status === kakao.maps.services.Status.OK) {
               var position = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+              // 위도, 경도 좌표를 사용한 거리계산 결과를 통해 가장 가까운 스타벅스로 중심 이동
+              let distance = getDistance(
+                info.lat,
+                info.lng,
+                result[0].y,
+                result[0].x
+              );
+              if (distance < minDistance) {
+                minDistance = distance;
+                map.setCenter(position);
+              }
 
               var imageSrc = "images/starbucks-icon.png",
                 imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기입니다
@@ -399,7 +431,6 @@ export default {
                 // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
                 infowindow.open(map, marker);
               });
-
               // 마커에 마우스아웃 이벤트를 등록합니다
               kakao.maps.event.addListener(marker, "mouseout", function () {
                 // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
@@ -410,21 +441,17 @@ export default {
                 map.setCenter(marker.getPosition());
               });
               marker.setMap(map);
-
-              if (index == 0) map.setCenter(position);
             }
           });
         });
       });
     },
-
     eraseStarbucksMarker() {
       starbucksMarkers.forEach((element) => {
         element.marker.setMap(null);
       });
       starbucksMarkers = [];
     },
-
   },
 }; // end of export
 </script>
