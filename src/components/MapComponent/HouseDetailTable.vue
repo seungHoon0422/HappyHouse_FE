@@ -35,13 +35,13 @@
         >
 
         <a-button
-          v-if="isFirst"
+          v-if="userInfo && isFirst"
           type="primary"
           style="margin: 10px"
           @click="interestplus"
           >관심등록</a-button
         >
-        <p v-if="!isFirst">관심 등록한 매물입니다.</p>
+        <p v-if="userInfo && !isFirst">관심 등록한 매물입니다.</p>
       </a-col>
     </a-row>
   </div>
