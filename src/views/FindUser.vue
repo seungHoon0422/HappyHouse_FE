@@ -3,16 +3,10 @@
     <!-- Sign Up Image And Headings -->
     <div
       class="sign-up-header"
-      style="background-image: url('images/bg-signup.jpg')"
-    >
-      <div class="content">
-        <h1 class="mb-5">Sign Up</h1>
-        <p class="text-lg">
-          Use these awesome forms to login or create new account in your project
-          for free.
-        </p>
-      </div>
-    </div>
+      style="
+        background-image: url(https://photo.coolenjoy.net/data/editor/2108/2117eaf4086e95f302f5fdcc3dd04c979011f6e2.jpg);
+      "
+    ></div>
     <!-- / Sign Up Image And Headings -->
 
     <!-- Sign Up Form -->

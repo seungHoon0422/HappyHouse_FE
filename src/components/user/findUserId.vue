@@ -6,33 +6,21 @@
       :label-col="{ span: 5 }"
       class="login-form"
     >
-      <a-form-item label="이름" class="mb-10">
-        <a-input
-          style="width: 350px"
-          v-decorator="[
-            'name',
-            {
-              rules: [{ required: true, message: 'Please input your name!' }],
-            },
-          ]"
-          placeholder="name"
-          v-model="username"
+      <a-form-item label="이름" class="my-30">
+        <a-input style="width: 350px" placeholder="name" v-model="username">
+        </a-input
+        ><br />
+        <span class="ml-30 text-danger" v-if="!nameinput"
+          >이름을 입력하여 주세요.</span
         >
-        </a-input>
       </a-form-item>
-      <a-form-item label="이메일" class="mb-5">
-        <a-input
-          style="width: 350px"
-          v-decorator="[
-            'email',
-            {
-              rules: [{ required: true, message: 'Please input your email!' }],
-            },
-          ]"
-          placeholder="email"
-          v-model="email"
+      <a-form-item label="이메일" class="my-30">
+        <a-input style="width: 350px" placeholder="email" v-model="email">
+        </a-input
+        ><br />
+        <span class="text-danger ml-40" v-if="!emailinput"
+          >이메일을 입력하여 주세요.</span
         >
-        </a-input>
       </a-form-item>
       <a-form-item>
         <a-button
@@ -56,6 +44,8 @@ export default {
     return {
       username: "",
       email: "",
+      nameinput: true,
+      emailinput: true,
     };
   },
   beforeCreate() {
@@ -64,18 +54,27 @@ export default {
   },
   methods: {
     findid() {
-      let username = this.username;
-      let email = this.email;
-      http
-        .get("/restuser/findid/" + username + "/" + email)
-        .then(function (response) {
-          if (response.data === "") {
-            alert("이름과 이메일을 확인하여 주세요 !! ");
-          } else {
-            alert(response.data);
-          }
-        });
-      console.log("아이디 찾기");
+      this.nameinput = true;
+      this.emailinput = true;
+      if (!this.username) {
+        this.nameinput = false;
+      }
+      if (!this.email) {
+        this.emailinput = false;
+      } else if (this.nameinput && this.emailinput) {
+        let username = this.username;
+        let email = this.email;
+        http
+          .get("/restuser/findid/" + username + "/" + email)
+          .then(function (response) {
+            console.log(response.data);
+            if (response.data === "") {
+              alert("회원정보가 존재하지 않습니다");
+            } else {
+              alert(username + "님의 아이디 :  " + " " + response.data);
+            }
+          });
+      }
     },
   },
 };

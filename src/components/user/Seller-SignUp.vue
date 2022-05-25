@@ -50,6 +50,7 @@
       <a-form-item>
         <a-button
           type="primary"
+          shape="round"
           block
           html-type="submit"
           class="login-form-button"

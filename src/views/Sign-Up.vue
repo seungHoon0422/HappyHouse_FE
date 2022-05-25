@@ -3,7 +3,9 @@
     <!-- Sign Up Image And Headings -->
     <div
       class="sign-up-header"
-      style="background-image: url('images/home-decor-2.jpeg')"
+      style="
+        background-image: url(https://photo.coolenjoy.net/data/editor/2108/2117eaf4086e95f302f5fdcc3dd04c979011f6e2.jpg);
+      "
     >
       <div class="content">
         <h1 class="mb-5">Sign Up</h1>
@@ -67,4 +69,10 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.login-form-button {
+  border: 0ch;
+  background-color: rgb(133, 143, 160);
+  font-size: medium;
+}
+</style>
