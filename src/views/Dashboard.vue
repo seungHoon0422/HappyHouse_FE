@@ -46,8 +46,8 @@
           </div>
         </a-col>
         <a-row :gutter="24" type="flex">
-          <a-col :span="6"></a-col>
-          <a-col :span="6">
+          <a-col :span="4"></a-col>
+          <a-col :span="8">
             <div>
               <a-row>
                 <a-card
@@ -67,7 +67,7 @@
               </a-row>
             </div>
           </a-col>
-          <a-col :span="6">
+          <a-col :span="8">
             <div>
               <a-row>
                 <a-card
@@ -76,13 +76,20 @@
                   style="margin-top: 30%; margin-left: auto; margin-right: auto"
                   size="small"
                 >
-                  <template #extra><a href="#/tables">more</a></template>
                   <a-table
-                    :dataSource="articleItems"
-                    :columns="columns"
+                    :dataSource="newsItems"
+                    :columns="newsColumns"
                     :pagination="false"
                     size="small"
-                  />
+                    :customRow="clicknews"
+                  >
+                  </a-table>
+                  <template #extra
+                    ><a
+                      href="http://www.hapt.co.kr/news/articleList.html?view_type=sm"
+                      >news 보러가기</a
+                    ></template
+                  >
                 </a-card>
               </a-row>
             </div>
@@ -101,29 +108,54 @@ export default {
   data() {
     return {
       articleItems: [],
-
+      newsItems: [],
       columns: [
         {
-          title: "no",
+          title: "번호",
           dataIndex: "articleno",
           key: "articleno",
         },
         {
-          title: "subject",
+          title: "제목",
           dataIndex: "subject",
           key: "subject",
+        },
+      ],
+      newsColumns: [
+        {
+          title: "제목",
+          dataIndex: "title",
+          key: "title",
         },
       ],
     };
   },
   created() {
+    this.crawlingNews();
     http.get("/board").then(({ data }) => {
       this.articleItems = data.sort((a, b) => {
         return b.articleno - a.articleno;
       });
-      this.articleItems = this.articleItems.splice(0, 3);
+      this.articleItems = this.articleItems.splice(0, 5);
       console.log(this.articleItems);
     });
+  },
+  methods: {
+    crawlingNews() {
+      http.get("/news/crawling").then(({ data }) => {
+        data = data.splice(0, 5);
+        this.newsItems = data;
+      });
+    },
+    clicknews: function (record, index) {
+      return {
+        on: {
+          click: () => {
+            location.href = record.url;
+          },
+        },
+      };
+    },
   },
 };
 </script>
@@ -156,5 +188,8 @@ p,
 a {
   position: relative;
   z-index: 1000; /*맨 앞으로 나오도록 함*/
+}
+.newslink {
+  color: black;
 }
 </style>
