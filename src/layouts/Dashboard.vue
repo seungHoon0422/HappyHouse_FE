@@ -21,6 +21,7 @@
         :sidebarTheme="sidebarTheme"
         @toggleSidebar="toggleSidebar"
       ></DashboardSidebar>
+
       <!-- / Main Sidebar -->
 
       <!-- Layout Content -->
