@@ -72,7 +72,7 @@ export default {
 <style lang="scss">
 .login-form-button {
   border: 0ch;
-  background-color: rgb(133, 143, 160);
+  background-color: rgb(89, 96, 108);
   font-size: medium;
 }
 </style>

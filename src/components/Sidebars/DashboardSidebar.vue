@@ -103,8 +103,9 @@
           <span class="label">MAP</span>
         </router-link>
       </a-menu-item>
-      <!-- <a-menu-item>
-        <router-link to="/rtl">
+
+      <a-menu-item v-if="userInfo && userInfo.level === 1">
+        <router-link to="/sellerPage">
           <span class="icon">
             <svg
               width="20"
@@ -114,38 +115,22 @@
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
+                d="M4 4C2.89543 4 2 4.89543 2 6V7H18V6C18 4.89543 17.1046 4 16 4H4Z"
+                fill="#111827"
+              />
+              <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
-                d="M3 6C3 4.34315 4.34315 3 6 3H16C16.3788 3 16.725 3.214 16.8944 3.55279C17.0638 3.89157 17.0273 4.29698 16.8 4.6L14.25 8L16.8 11.4C17.0273 11.703 17.0638 12.1084 16.8944 12.4472C16.725 12.786 16.3788 13 16 13H6C5.44772 13 5 13.4477 5 14V17C5 17.5523 4.55228 18 4 18C3.44772 18 3 17.5523 3 17V6Z"
+                d="M18 9H2V14C2 15.1046 2.89543 16 4 16H16C17.1046 16 18 15.1046 18 14V9ZM4 13C4 12.4477 4.44772 12 5 12H6C6.55228 12 7 12.4477 7 13C7 13.5523 6.55228 14 6 14H5C4.44772 14 4 13.5523 4 13ZM9 12C8.44772 12 8 12.4477 8 13C8 13.5523 8.44772 14 9 14H10C10.5523 14 11 13.5523 11 13C11 12.4477 10.5523 12 10 12H9Z"
                 fill="#111827"
               />
             </svg>
           </span>
-          <span class="label">RTL</span>
+          <span class="label">매물등록</span>
         </router-link>
-      </a-menu-item> -->
+      </a-menu-item>
       <a-menu-item class="menu-item-header"> Account Pages </a-menu-item>
-      <!-- <a-menu-item v-if="userInfo">
-        <router-link to="/sign-in">
-          <span class="icon">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M6 2C5.44772 2 5 2.44772 5 3V4H4C2.89543 4 2 4.89543 2 6V16C2 17.1046 2.89543 18 4 18H16C17.1046 18 18 17.1046 18 16V6C18 4.89543 17.1046 4 16 4H15V3C15 2.44772 14.5523 2 14 2C13.4477 2 13 2.44772 13 3V4H7V3C7 2.44772 6.55228 2 6 2ZM6 7C5.44772 7 5 7.44772 5 8C5 8.55228 5.44772 9 6 9H14C14.5523 9 15 8.55228 15 8C15 7.44772 14.5523 7 14 7H6Z"
-                fill="#111827"
-              />
-            </svg>
-          </span>
-          <span class="label">Sign out</span>
-        </router-link>
-      </a-menu-item> -->
+
       <a-menu-item v-if="userInfo === null">
         <router-link to="/sign-in">
           <span class="icon">
@@ -263,55 +248,6 @@
         </router-link>
       </a-menu-item>
     </a-menu>
-    <!-- / Sidebar Navigation Menu -->
-
-    <!-- Sidebar Footer -->
-    <!--    <div class="aside-footer">
-      <div class="footer-box">
-        <span class="icon">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 4C3 3.44772 3.44772 3 4 3H16C16.5523 3 17 3.44772 17 4V6C17 6.55228 16.5523 7 16 7H4C3.44772 7 3 6.55228 3 6V4Z"
-              fill="#111827"
-            />
-            <path
-              d="M3 10C3 9.44771 3.44772 9 4 9H10C10.5523 9 11 9.44771 11 10V16C11 16.5523 10.5523 17 10 17H4C3.44772 17 3 16.5523 3 16V10Z"
-              fill="#111827"
-            />
-            <path
-              d="M14 9C13.4477 9 13 9.44771 13 10V16C13 16.5523 13.4477 17 14 17H16C16.5523 17 17 16.5523 17 16V10C17 9.44771 16.5523 9 16 9H14Z"
-              fill="#111827"
-            />
-          </svg>
-        </span>
-        <h6>Need Help?</h6>
-        <p>Please check our docs</p>
-        <a-button
-          type="primary"
-          href="https://demos.creative-tim.com/muse-vue-ant-design-dashboard/documentation"
-          block
-          target="_blank"
-        >
-          DOCUMENTATION
-        </a-button>
-      </div>
-    </div> -->
-    <!-- / Sidebar Footer -->
-
-    <!--    <a-button
-      type="primary"
-      href="https://www.creative-tim.com/product/muse-vue-ant-design-dashboard-pro"
-      block
-      target="_blank"
-    >
-      UPGRADE TO PRO
-    </a-button> -->
   </a-layout-sider>
   <!-- / Main Sidebar -->
 </template>
