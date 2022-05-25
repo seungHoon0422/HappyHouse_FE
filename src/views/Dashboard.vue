@@ -51,7 +51,7 @@
             <div>
               <a-row>
                 <a-card
-                  title="공지사항"
+                  title="FAQ"
                   :bordered="true"
                   style="margin-top: 30%; margin-left: auto; margin-right: auto"
                   size="small"
