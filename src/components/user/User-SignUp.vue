@@ -7,44 +7,24 @@
       class="login-form"
     >
       <a-form-item label="이름" class="mb-10">
-        <a-input
-          style="width: 350px"
-          v-decorator="[
-            'name',
-            {
-              rules: [{ required: true, message: 'Please input your name!' }],
-            },
-          ]"
-          placeholder="Name"
-          v-model="username"
-        >
+        <a-input style="width: 350px" placeholder="Name" v-model="username">
         </a-input>
       </a-form-item>
       <a-form-item label="아이디" class="mb-10">
         <a-input
           style="width: 350px"
-          v-decorator="[
-            'id',
-            {
-              rules: [{ required: true, message: 'Please input your id!' }],
-            },
-          ]"
           placeholder="id"
           v-model="userid"
+          @blur="checkId"
         >
-        </a-input>
+        </a-input
+        ><br /><span class="text-danger ml-50" v-if="!idavail"
+          >이미 사용중인 아이디입니다.</span
+        >
       </a-form-item>
       <a-form-item label="비밀번호" class="mb-5">
         <a-input
           style="width: 350px"
-          v-decorator="[
-            'password',
-            {
-              rules: [
-                { required: true, message: 'Please input your Password!' },
-              ],
-            },
-          ]"
           type="password"
           placeholder="Password"
           v-model="userpass"
@@ -52,17 +32,7 @@
         </a-input>
       </a-form-item>
       <a-form-item label="이메일" class="mb-10">
-        <a-input
-          style="width: 150px"
-          v-decorator="[
-            'email',
-            {
-              rules: [{ required: true, message: 'Please input your email!' }],
-            },
-          ]"
-          placeholder="Email"
-          v-model="emailid"
-        >
+        <a-input style="width: 150px" placeholder="Email" v-model="emailid">
         </a-input>
         &nbsp; @ &nbsp;
         <a-select v-model="emaildomain" style="width: 170px">
@@ -75,32 +45,12 @@
       <a-form-item label="휴대폰" class="mb-10">
         <a-input
           style="width: 350px"
-          v-decorator="[
-            'phone',
-            {
-              rules: [{ required: true, message: 'Please input your phone!' }],
-            },
-          ]"
           placeholder="010-xxxx-xxxx"
           v-model="phone"
         >
         </a-input>
       </a-form-item>
 
-      <a-form-item class="mb-10">
-        <a-checkbox
-          v-decorator="[
-            'remember',
-            {
-              valuePropName: 'checked',
-              initialValue: true,
-            },
-          ]"
-        >
-          I agree the
-          <a href="#" class="font-bold text-dark">Terms and Conditions</a>
-        </a-checkbox>
-      </a-form-item>
       <a-form-item>
         <a-button
           type="primary"
@@ -127,6 +77,7 @@ export default {
       phone: "",
       emailid: "",
       emaildomain: "",
+      idavail: "true",
     };
   },
   beforeCreate() {
@@ -134,24 +85,49 @@ export default {
     this.form = this.$form.createForm(this, { name: "normal_login" });
   },
   methods: {
+    checkId() {
+      this.idavail = true;
+
+      http.get("/restuser/checkid/" + this.userid).then(({ data }) => {
+        if (data === "ok") {
+          console.log("사용가능한 아이디");
+          this.idavail = true;
+        } else {
+          this.idavail = false;
+        }
+      });
+    },
     registerBtn() {
       let email = this.emailid + "@" + this.emaildomain;
 
-      http
-        .post("/restuser/regist", null, {
-          params: {
-            userid: this.userid,
-            username: this.username,
-            userpass: this.userpass,
-            email: email,
-            phone: this.phone,
-            level: 0,
-          },
-        })
-        .then(function (response) {
-          alert(response.data);
-        });
-      this.$router.push({ name: "Sign-In" });
+      if (!this.username) {
+        alert("이름을 입력하여 주세요");
+      } else if (!this.idavail) {
+        alert("아이디를 확인하여 주세요");
+      } else if (!this.userpass) {
+        alert("비밀번호를 입력하여 주세요");
+      } else if (!email) {
+        alert("이메일을 입력하여 주세요 !! ");
+      } else if (!this.emailid || !this.emaildomain) {
+        alert("이메일 형식을 확인하여 주세요 !! ");
+      } else {
+        http
+          .post("/restuser/regist", null, {
+            params: {
+              userid: this.userid,
+              username: this.username,
+              userpass: this.userpass,
+              email: email,
+              phone: this.phone,
+              level: 0,
+            },
+          })
+          .then(function (response) {
+            console.log(response);
+            alert(response.data);
+          });
+        this.$router.push({ name: "Sign-In" });
+      }
     },
   },
 };
