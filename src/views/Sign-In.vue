@@ -9,10 +9,7 @@
         :xl="{ span: 6, offset: 2 }"
         class="col-form"
       >
-        <h3>Sign In</h3>
-        <h5 class="font-regular text-muted">
-          Enter your id and password to sign in
-        </h5>
+        <h3 class="mb-40">Sign In</h3>
 
         <!-- Sign In Form -->
         <a-form
@@ -21,36 +18,23 @@
           class="login-form"
           :hideRequiredMark="true"
         >
-          <a-form-item class="mb-10" label="id" :colon="false">
-            <a-input
-              v-decorator="[
-                'id',
-                {
-                  rules: [{ required: true, message: 'Please input your id!' }],
-                },
-              ]"
-              v-model="user.userid"
-              placeholder="id"
-            />
+          <a-form-item class="mb-10" label="아이디" :colon="false">
+            <a-input v-model="user.userid" placeholder="id" />
           </a-form-item>
-          <a-form-item class="mb-5" label="Password" :colon="false">
+          <span class="text-danger" v-if="!idinput"
+            >아이디를 입력하여 주세요.</span
+          >
+          <a-form-item class="mb-30" label="비밀번호" :colon="false">
             <a-input
-              v-decorator="[
-                'password',
-                {
-                  rules: [
-                    { required: true, message: 'Please input your password!' },
-                  ],
-                },
-              ]"
               type="password"
               v-model="user.userpass"
               placeholder="Password"
             />
           </a-form-item>
-          <a-form-item class="mb-10">
-            <a-switch v-model="rememberMe" /> Remember Me
-          </a-form-item>
+          <span class="text-danger" v-if="!passinput"
+            >비밀번호를 입력하여 주세요.</span
+          >
+
           <a-form-item>
             <a-button
               type="primary"
@@ -91,6 +75,8 @@ export default {
         userpass: "",
       },
       rememberMe: true,
+      idinput: true,
+      passinput: true,
     };
   },
   beforeCreate() {
@@ -104,31 +90,35 @@ export default {
     ...mapActions(memberStore, ["userConfirm", "getUserInfo"]),
 
     async loginBtn() {
-      console.log("로그인할 사용자 : " + this.user.userid);
-      await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("access-token");
-      //로그인 됬으면,
-      if (this.isLogin) {
-        //console.log("로그인 되었음 ");
-        await this.getUserInfo(token);
-        this.$router.push({ name: "Home" });
+      this.idinput = this.passinput = true;
+      if (!this.user.userid) {
+        this.idinput = false;
+      }
+      if (!this.user.userpass) {
+        this.passinput = false;
+      }
+      //아이디 비번 둘다 입력했으면,
+      if (this.idinput && this.passinput) {
+        console.log("로그인할 사용자 : " + this.user.userid);
+
+        await this.userConfirm(this.user);
+        let token = sessionStorage.getItem("access-token");
+        //로그인 됬으면,
+        if (this.isLogin) {
+          //console.log("로그인 되었음 ");
+          await this.getUserInfo(token);
+          this.$router.push({ name: "Home" });
+        }
       }
     },
-    // Handles input validation after submission.
-    // handleSubmit(e) {
-    //   e.preventDefault();
-    //   this.form.validateFields((err, values) => {
-    //     if (!err) {
-    //       console.log("Received values of form: ", values);
-    //     }
-    //   });
-    // },
   },
 };
 </script>
 
 <style lang="scss">
-body {
-  background-color: #ffffff;
+.login-form-button {
+  border: 0ch;
+  background-color: rgb(133, 143, 160);
+  font-size: medium;
 }
 </style>

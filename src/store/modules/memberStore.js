@@ -41,7 +41,7 @@ const memberStore = {
             alert(response.data.username + " 님 환영합니다.");
             sessionStorage.setItem("access-token", token);
           } else {
-            alert("로그인 실패");
+            alert("아이디와 비밀번호를 확인하여 주세요!! ");
           }
         });
     },

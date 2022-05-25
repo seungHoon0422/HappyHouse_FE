@@ -56,6 +56,12 @@ let routes = [
     component: () => import("../views/Billing.vue"),
   },
   {
+    path: "/sellerPage",
+    name: "sellerPage",
+    layout: "dashboard",
+    component: () => import("../views/SellerPage.vue"),
+  },
+  {
     path: "/Profile",
     name: "Profile",
     layout: "dashboard",
@@ -72,9 +78,7 @@ let routes = [
   {
     path: "/sign-up",
     name: "Sign-Up",
-    meta: {
-      layoutClass: "layout-sign-up",
-    },
+
     component: () => import("../views/Sign-Up.vue"),
   },
   {

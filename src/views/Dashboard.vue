@@ -44,6 +44,23 @@
               <a-button shape="round" block class="bolder">Find House</a-button>
             </router-link>
           </div>
+
+          <div
+            v-if="userInfo && userInfo.level === 1"
+            style="
+              width: 200px;
+              position: relative;
+              margin-top: 15px;
+              margin-left: auto;
+              margin-right: auto;
+            "
+          >
+            <router-link to="/sellerPage">
+              <a-button shape="round" block class="boldering"
+                >매물 등록
+              </a-button>
+            </router-link>
+          </div>
         </a-col>
         <a-row :gutter="24" type="flex">
           <a-col :span="4"></a-col>
@@ -103,6 +120,8 @@
 
 <script>
 import http from "@/api/http";
+import { mapState } from "vuex";
+const memberStore = "memberStore";
 export default {
   components: {},
   data() {
@@ -129,6 +148,9 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
   },
   created() {
     this.crawlingNews();
@@ -191,5 +213,8 @@ a {
 }
 .newslink {
   color: black;
+}
+.boldering {
+  background-color: #c3cbd1fd;
 }
 </style>
