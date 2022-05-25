@@ -49,11 +49,18 @@ let routes = [
     component: () => import("../views/ModifyArticle.vue"),
     props: true,
   },
+  // {
+  //   path: "/billing",
+  //   name: "MAP",
+  //   layout: "dashboard",
+  //   component: () => import("../views/Billing.vue"),
+  // },
   {
-    path: "/billing",
+    path: "/billing/:aptName",
     name: "MAP",
     layout: "dashboard",
     component: () => import("../views/Billing.vue"),
+    props: true,
   },
   {
     path: "/sellerPage",

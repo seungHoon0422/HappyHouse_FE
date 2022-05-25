@@ -154,6 +154,7 @@ export default {
   },
   created() {
     this.crawlingNews();
+
     http.get("/board").then(({ data }) => {
       this.articleItems = data.sort((a, b) => {
         return b.articleno - a.articleno;

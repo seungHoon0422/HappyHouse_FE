@@ -127,20 +127,20 @@ export default {
     modify() {
       // console.log(this.user);
       http
-        .post("restuser/update", null, {
+        .put("restuser/update", null, {
           params: {
-            userid: this.userInfo.userid,
-            userpass: this.userInfo.userpass,
-            username: this.userInfo.username,
-            email: this.userInfo.email,
-            phone: this.userInfo.phone,
+            userid: this.user.userid,
+            userpass: this.user.userpass,
+            username: this.user.username,
+            email: this.user.email,
+            phone: this.user.phone,
           },
         })
         .then(({ data }) => {
-          console.log(data);
-          console.log(this.user);
-
-          this.changeUser(memberStore, this.user);
+          console.log("data", data);
+          console.log("this user", this.user);
+          this.$store.commit("memberStore/changeUser", this.user);
+          //          this.changeUser(memberStore, this.user);
 
           // this.memberStore.commit("SET_USER_INFO", this.user);
         });

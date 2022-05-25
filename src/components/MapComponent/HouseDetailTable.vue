@@ -28,20 +28,20 @@
         </a-descriptions>
       </a-card>
     </a-row>
-    <a-row>
+    <a-row v-if="no != ''">
       <a-col :span="24" align="middle">
         <a-button type="primary" style="margin: 10px" @click="clickStarbucks"
           >스타벅스 매장 보러가기</a-button
         >
 
         <a-button
-          v-if="userInfo && isFirst"
+          v-if="userInfo && first"
           type="primary"
           style="margin: 10px"
           @click="interestplus"
           >관심등록</a-button
         >
-        <p v-if="userInfo && !isFirst">관심 등록한 매물입니다.</p>
+        <p v-if="userInfo && !first">관심 등록한 매물입니다.</p>
       </a-col>
     </a-row>
   </div>
@@ -71,6 +71,7 @@ export default {
       area: "",
       floor: "",
       buildYear: "",
+      first: true,
     };
   },
   filters: {
@@ -98,6 +99,9 @@ export default {
       this.area = this.detailInfo.area;
       this.floor = this.detailInfo.floor;
       this.buildYear = this.detailInfo.buildYear;
+    },
+    isFirst() {
+      this.first = this.$props.isFirst;
     },
   },
   mounted() {},
@@ -127,6 +131,7 @@ export default {
           .then(({ data }) => {
             console.log(data);
             alert("관심목록에 추가되었습니다.");
+            this.$emit("registInterest", this.first);
           })
           .catch((error) => {
             console.log(error);

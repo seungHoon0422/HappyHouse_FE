@@ -159,6 +159,13 @@ export default {
   components: {
     DrawHouseTable,
   },
+
+  props: {
+    aptName: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       map: null,
@@ -183,6 +190,9 @@ export default {
   }, // end of data
   created() {
     this.getSidoList();
+    if (this.$props.aptName != " ") {
+      this.interestApartNameSearch(this.$props.aptName);
+    }
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -211,6 +221,15 @@ export default {
     },
   },
   methods: {
+    interestApartNameSearch: function (apartname) {
+      console.log("interest search", apartname);
+      http.post("/resthouse/nameSearch/" + apartname).then(({ data }) => {
+        //          console.log(data);
+        this.infos = data;
+        this.data = data;
+      });
+    },
+
     initMap() {
       console.log("initMap");
       var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
