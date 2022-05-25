@@ -4,14 +4,12 @@
       <!-- Sign In Form Column -->
       <a-col
         :span="24"
-        :md="10"
+        :md="8"
         :lg="{ span: 12, offset: 0 }"
-        :xl="{ span: 6, offset: 2 }"
+        :xl="{ span: 6, offset: 0 }"
       >
         <h3 class="mb-10">매물 등록하기</h3>
-        <p class="mb-40">
-          등록을 원하시는 아파트를 찾아, 거래 정보를 입력하여 주세요.
-        </p>
+        <p>등록을 원하시는 아파트를 찾아, 거래 정보를 입력하여 주세요.</p>
 
         <!-- Sign In Form -->
         <a-form id="components-form-demo-normal-login" :hideRequiredMark="true">
@@ -19,7 +17,10 @@
             class="font-semibold"
             label="[ 아파트정보 ] "
             :colon="false"
-            ><a-row class="mb-10">
+            ><a-row class="mb-2">
+              <span class="text-danger" v-if="!inputapt"
+                >등록 아파트 정보를 정확하게 입력하여 주세요.</span
+              >
               <a-select
                 v-model="sidocode"
                 style="width: 100%"
@@ -62,19 +63,51 @@
             </a-row>
             <span class="text-danger" v-if="!haveapt"
               >해당 지역은 매매가능한 아파트가 없습니다.</span
-            ></a-form-item
-          >
-
-          <!-- <a-row class="my-10">
-            <a-input
-              placeholder="아파트 이름 검색"
-              v-model="inputName"
-              enter-button
-              @search="search"
             >
-            </a-input>
-          </a-row> -->
+          </a-form-item>
+
+          <a-form-item
+            class="font-semibold"
+            label="[ 거래정보 ] - 단위 작성 x  "
+            :colon="false"
+          >
+            <a-form-item>
+              <a-input
+                addon-before="매매가격"
+                v-model="dealAmount"
+                placeholder="(만)원"
+              />
+            </a-form-item>
+
+            <a-form-item>
+              <a-input
+                addon-before="면적"
+                v-model="area"
+                placeholder="면적(㎡)"
+              />
+            </a-form-item>
+
+            <!--type은 1로-->
+            <a-form-item>
+              <a-input
+                addon-before="층"
+                v-model="floor"
+                placeholder="층(floor)"
+              />
+            </a-form-item>
+          </a-form-item>
         </a-form>
+        <a-col
+          :span="24"
+          style="display: flex; align-items: center; justify-content: flex-end"
+        >
+          <a-button
+            class="seller-form-button"
+            size="small"
+            @click="sellerRegist"
+            >등록</a-button
+          >
+        </a-col>
       </a-col>
     </a-row>
   </div>
@@ -97,13 +130,16 @@ export default {
       guguncode: "default",
       aptlist: [{ code: "default", name: "아파트 선택" }],
       infos: [],
-      // input apart name
       inputName: "",
       // filter
 
-      aptcode: "아파트 선택",
+      aptcode: "아파트선택",
+      inputapt: true,
       haveapt: true,
       data: [],
+      dealAmount: "",
+      area: "",
+      floor: "",
     };
   }, // end of data
   created() {
@@ -120,6 +156,15 @@ export default {
   },
 
   methods: {
+    sellerRegist() {
+      this.inputapt = true;
+      if (this.aptcode === "아파트선택") {
+        this.inputapt = false;
+      } else if (!this.dealAmount || !this.area || !this.floor) {
+        alert("모든 정보를 정확하게 입력하여 주세요.");
+      }
+    },
+
     getSidoList() {
       console.log("get sido list");
       http.get("/region/sido").then(({ data }) => {
@@ -161,4 +206,9 @@ export default {
 }; // end of export
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.seller-form-button {
+  border: 0ch;
+  background-color: rgb(195, 211, 238);
+}
+</style>
