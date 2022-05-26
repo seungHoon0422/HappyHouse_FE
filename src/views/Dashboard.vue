@@ -68,7 +68,7 @@
             <div>
               <a-row>
                 <a-card
-                  title="공지사항"
+                  title="FAQ"
                   :bordered="true"
                   style="margin-top: 30%; margin-left: auto; margin-right: auto"
                   size="small"
@@ -154,6 +154,7 @@ export default {
   },
   created() {
     this.crawlingNews();
+
     http.get("/board").then(({ data }) => {
       this.articleItems = data.sort((a, b) => {
         return b.articleno - a.articleno;

@@ -22,7 +22,12 @@
           sidodetail.dongName
         }}</h10>
         <p>
-          <router-link class="pl-10" to="/billing"
+          <router-link
+            class="pl-10"
+            :to="{
+              name: 'MAP',
+              params: { aptName: aptname },
+            }"
             >-> 지도에서 찾아보기</router-link
           >
         </p>

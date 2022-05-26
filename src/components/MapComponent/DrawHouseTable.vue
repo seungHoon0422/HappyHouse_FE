@@ -55,6 +55,7 @@
           @clickRecord="clickRecord"
           @showStarbucks="showStarbucks"
           :isFirst="isFirst"
+          @registInterest="registInterest"
         ></house-detail-table>
       </a-col>
     </a-row>
@@ -101,6 +102,7 @@ export default {
   computed: {
     ...mapState(memberStore, ["userInfo"]),
   },
+
   created() {},
   mounted() {
     console.log("table items ", this.$props.data);
@@ -141,6 +143,22 @@ export default {
           },
         },
       };
+    },
+    registInterest: function (first) {
+      console.log("regist interest", first);
+      let userid = this.userInfo.userid;
+      let aptCode = this.detailInfo.aptCode;
+      http
+        .get("/interest/already/" + userid + "/" + aptCode)
+        .then(({ data }) => {
+          if (data === 0) {
+            console.log("아직 등록한 적 없는 매물 ");
+            this.isFirst = true;
+          } else {
+            console.log("등록한 적 있는 관심매물");
+            this.isFirst = false;
+          }
+        });
     },
     clickRecord(record) {
       this.$emit("clickRecord", record);

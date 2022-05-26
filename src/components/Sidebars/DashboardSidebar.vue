@@ -79,7 +79,12 @@
         </router-link>
       </a-menu-item>
       <a-menu-item>
-        <router-link to="/billing">
+        <router-link
+          :to="{
+            path: '/billing/ ',
+            params: { aptName: '' },
+          }"
+        >
           <span class="icon">
             <svg
               width="20"
@@ -281,11 +286,16 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
+    ...mapMutations(memberStore, [
+      "SET_IS_LOGIN",
+      "SET_USER_INFO",
+      "SET_LOGOUT",
+    ]),
     logout() {
       console.log("로그아웃좀 ");
       this.SET_IS_LOGIN(false);
       this.SET_USER_INFO(null);
+      this.SET_LOGOUT();
       sessionStorage.removeItem("access-token");
       if (this.$route.path != "/") this.$router.push({ name: "Home" });
       console.log("bye");
