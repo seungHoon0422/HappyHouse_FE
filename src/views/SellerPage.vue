@@ -109,6 +109,14 @@
           >
         </a-col>
       </a-col>
+      <!--------------------------------------right----------------------------------------------------------------->
+      <!-- <a-col
+        :span="24"
+        :md="8"
+        :lg="{ span: 12, offset: 0 }"
+        :xl="{ span: 6, offset: 0 }"
+      >
+      </a-col> -->
     </a-row>
   </div>
 </template>
@@ -116,6 +124,8 @@
 <script>
 import DrawHouseTable from "../components/MapComponent/DrawHouseTable";
 import http from "@/api/http";
+const memberStore = "memberStore";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -154,7 +164,9 @@ export default {
     );
     this.map.setCenter(position);
   },
-
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
   methods: {
     sellerRegist() {
       let aptList = {};
@@ -193,6 +205,7 @@ export default {
               floor: this.floor,
               type: 1,
               no: 1,
+              sellerid: this.userInfo.userid,
             },
           })
           .then(({ data }) => {
