@@ -198,6 +198,7 @@ export default {
           .then(({ data }) => {
             console.log(data);
             alert("매물 등록이 완료되었습니다.");
+            this.$router.push({ name: "Home" });
           });
       }
     },

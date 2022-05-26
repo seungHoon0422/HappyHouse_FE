@@ -292,13 +292,14 @@ export default {
       "SET_LOGOUT",
     ]),
     logout() {
-      console.log("로그아웃좀 ");
-      this.SET_IS_LOGIN(false);
-      this.SET_USER_INFO(null);
-      this.SET_LOGOUT();
-      sessionStorage.removeItem("access-token");
-      if (this.$route.path != "/") this.$router.push({ name: "Home" });
-      console.log("bye");
+      if (confirm("LOGOUT ?  ")) {
+        this.SET_IS_LOGIN(false);
+        this.SET_USER_INFO(null);
+        this.SET_LOGOUT();
+        sessionStorage.removeItem("access-token");
+        if (this.$route.path != "/") this.$router.push({ name: "Home" });
+        console.log("bye");
+      }
     },
   },
   computed: {
