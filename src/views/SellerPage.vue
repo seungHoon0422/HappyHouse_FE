@@ -68,7 +68,7 @@
 
           <a-form-item
             class="font-semibold"
-            label="[ 거래정보 ] - 단위 작성 x  "
+            label="[ 거래정보 ]"
             :colon="false"
           >
             <a-form-item>
@@ -157,11 +157,20 @@ export default {
 
   methods: {
     sellerRegist() {
+      let aptList = {};
       this.inputapt = true;
       if (this.aptcode === "아파트선택") {
         this.inputapt = false;
       } else if (!this.dealAmount || !this.area || !this.floor) {
         alert("모든 정보를 정확하게 입력하여 주세요.");
+      } else {
+        console.log("아파트리스트", this.aptlist);
+        Array.from(this.aptlist).forEach((element, index) => {
+          if (element.aptCode === this.aptcode) {
+            aptList = this.aptlist.splice(index, 1);
+          }
+        });
+        console.log(aptList);
       }
     },
 
