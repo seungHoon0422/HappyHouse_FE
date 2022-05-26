@@ -3,7 +3,7 @@
     <!-- Header Background Image -->
     <div
       class="profile-nav-bg"
-      style="background-image: url('images/bg-profile.jpg')"
+      style="background-image: url('images/home-decor-3.jpeg')"
     ></div>
     <!-- / Header Background Image -->
 
@@ -31,6 +31,7 @@
               justify-content: flex-end;
             "
           >
+            <a-button @click="deleteUser">회원 탈퇴</a-button>
           </a-col>
         </a-row>
       </template>
@@ -59,7 +60,8 @@
 import http from "@/api/http";
 import CardProfileInformation from "../components/Cards/CardProfileInformation";
 import CardProfileInterest from "../components/Cards/CardProfileInterest";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import { invokeArrayFns } from "@vue/shared";
 const memberStore = "memberStore";
 const columns = [
   {
@@ -93,9 +95,9 @@ export default {
     if (this.userInfo === null) this.$router.push({ name: "Sign-In" });
     if (this.userInfo.level === 1) this.userlevel = "중개사무소 ";
     if (this.userInfo.level === 0) this.userlevel = "일반사용자";
+    if (this.userInfo.level === 2) this.userlevel = "관리자";
     let userid = this.userInfo.userid;
     http.get("/interest/" + userid).then(({ data }) => {
-      console.log(data);
       data.forEach((element, index) => {
         this.tableData.push({ aptname: element, key: index });
       });
@@ -105,6 +107,30 @@ export default {
   },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
+  },
+  methods: {
+    ...mapMutations(memberStore, [
+      "SET_IS_LOGIN",
+      "SET_USER_INFO",
+      "SET_LOGOUT",
+    ]),
+    deleteUser() {
+      if (confirm("정말 회원 탈퇴를 하시겠습니까 ? ")) {
+        // 탈퇴
+        // user table 에서 지우고, interest 에 있는거 지우고 로그아웃 시키고 !!
+        let userid = this.userInfo.userid;
+
+        http.delete("/restuser/" + userid).then(({ data }) => {
+          console.log(data);
+          this.SET_IS_LOGIN(false);
+          this.SET_USER_INFO(null);
+          this.SET_LOGOUT();
+          sessionStorage.removeItem("access-token");
+          if (this.$route.path != "/") this.$router.push({ name: "Home" });
+          console.log("bye");
+        });
+      }
+    },
   },
 };
 </script>

@@ -170,7 +170,35 @@ export default {
             aptList = this.aptlist.splice(index, 1);
           }
         });
-        console.log(aptList);
+        let date = new Date();
+        console.log(
+          date.getFullYear() + " " + date.getMonth() + " " + date.getDay()
+        );
+        // console.log(aptList);
+        // console.log(aptList[0].aptCode);
+        //aptlist : 지금 팔려고 하는 apt aptCode
+        let apt = aptList[0];
+
+        http
+          .post("/resthouse/sell", null, {
+            params: {
+              aptCode: apt.aptCode,
+              area: this.area,
+              dealAmount: this.dealAmount
+                .toString()
+                .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","),
+              dealDay: date.getDay(),
+              dealMonth: date.getMonth(),
+              dealYear: date.getFullYear(),
+              floor: this.floor,
+              type: 1,
+              no: 1,
+            },
+          })
+          .then(({ data }) => {
+            console.log(data);
+            alert("매물 등록이 완료되었습니다.");
+          });
       }
     },
 
